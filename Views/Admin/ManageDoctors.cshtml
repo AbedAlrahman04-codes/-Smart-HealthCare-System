@@ -1,0 +1,348 @@
+﻿@model IEnumerable<SmartHealthcareSystem.Models.Doctor>
+@{
+    ViewData["Title"] = "إدارة الأطباء";
+}
+
+<link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
+
+<div class="admin-page">
+    <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div>
+                <h1><i class="fas fa-user-md"></i> إدارة الأطباء</h1>
+                <p>عرض وإدارة جميع الأطباء في النظام</p>
+            </div>
+            <div class="header-actions">
+                <a asp-action="AddDoctor" class="btn-admin btn-primary-admin">
+                    <i class="fas fa-plus"></i>
+                    إضافة طبيب جديد
+                </a>
+            </div>
+        </div>
+
+        <!-- Statistics Summary -->
+        <div class="stats-summary">
+            <div class="summary-card">
+                <i class="fas fa-users"></i>
+                <div>
+                    <h3>@Model.Count()</h3>
+                    <p>إجمالي الأطباء</p>
+                </div>
+            </div>
+            <div class="summary-card">
+                <i class="fas fa-check-circle"></i>
+                <div>
+                    <h3>@Model.Count(d => d.IsAvailable)</h3>
+                    <p>أطباء متاحين</p>
+                </div>
+            </div>
+            <div class="summary-card">
+                <i class="fas fa-times-circle"></i>
+                <div>
+                    <h3>@Model.Count(d => !d.IsAvailable)</h3>
+                    <p>غير متاحين</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search and Filter -->
+        <div class="search-section">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="ابحث عن طبيب..." onkeyup="searchTable()">
+            </div>
+        </div>
+
+        <!-- Doctors Table -->
+        <div class="data-section">
+            <div class="data-table">
+                <table id="doctorsTable">
+                    <thead>
+                        <tr>
+                            <th>الطبيب</th>
+                            <th>التخصص</th>
+                            <th>رقم الترخيص</th>
+                            <th>رسوم الاستشارة</th>
+                            <th>ساعات العمل</th>
+                            <th>الحالة</th>
+                            <th>الإجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Any())
+                        {
+                            @foreach (var doctor in Model)
+                            {
+                                <tr id="doctor-@doctor.DoctorId">
+                                    <td>
+                                        <div class="user-info">
+                                            <div class="user-avatar">@doctor.User.FullName.Substring(0, 1)</div>
+                                            <div>
+                                                <strong style="color:black ;">@doctor.User.FullName</strong>
+                                                <br>
+                                                <small style="color: #7F8C8D;">@doctor.User.Email</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>@doctor.Specialization</td>
+                                    <td>@doctor.LicenseNumber</td>
+                                    <td>@doctor.ConsultationFee.ToString("C")</td>
+                                    <td>@doctor.WorkingHours</td>
+                                    <td>
+                                        @if (doctor.IsAvailable)
+                                        {
+                                            <span class="badge badge-success">متاح</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge badge-secondary">غير متاح</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="btn-icon btn-icon-warning"
+                                                    onclick="toggleAvailability(@doctor.DoctorId)"
+                                                    title="تغيير الحالة">
+                                                <i class="fas fa-toggle-on"></i>
+                                            </button>
+                                            <button class="btn-icon btn-icon-danger"
+                                                    onclick="deleteDoctor(@doctor.DoctorId, '@doctor.User.FullName')"
+                                                    title="حذف">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="7" style="text-align: center; padding: 3rem; color: #7F8C8D;">
+                                    <i class="fas fa-inbox" style="font-size: 3rem; display: block; margin-bottom: 1rem;"></i>
+                                    لا يوجد أطباء في النظام
+                                    <br>
+                                    <a asp-action="AddDoctor" class="btn-admin btn-primary-admin" style="margin-top: 1rem;">
+                                        <i class="fas fa-plus"></i> إضافة أول طبيب
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .stats-summary {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .summary-card {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+        .summary-card i {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #1A7FA0, #3B82F6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .summary-card h3 {
+            font-size: 2rem;
+            margin: 0;
+            color: #2C3E50;
+        }
+
+        .summary-card p {
+            margin: 0;
+            color: #7F8C8D;
+            font-size: 0.9rem;
+        }
+
+    .search-section {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 12px;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .search-box {
+        position: relative;
+        max-width: 500px;
+    }
+
+        .search-box i {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #7F8C8D;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 50px 12px 16px;
+            border: 2px solid #E5E9EC;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+            .search-box input:focus {
+                outline: none;
+                border-color: #3B82F6;
+                box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+            }
+
+    .action-buttons {
+        display: flex;
+        gap: 8px;
+    }
+
+    .btn-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s;
+    }
+
+    .btn-icon-warning {
+        background: #FFF3CD;
+        color: #F39C12;
+    }
+
+        .btn-icon-warning:hover {
+            background: #F39C12;
+            color: white;
+            transform: scale(1.1);
+        }
+
+    .btn-icon-danger {
+        background: #FFE5E5;
+        color: #E74C3C;
+    }
+
+        .btn-icon-danger:hover {
+            background: #E74C3C;
+            color: white;
+            transform: scale(1.1);
+        }
+</style>
+
+@section Scripts {
+    <script>
+        // Search functionality
+        function searchTable() {
+            const input = document.getElementById('searchInput');
+            const filter = input.value.toUpperCase();
+            const table = document.getElementById('doctorsTable');
+            const tr = table.getElementsByTagName('tr');
+
+            for (let i = 1; i < tr.length; i++) {
+                const td = tr[i].getElementsByTagName('td');
+                let found = false;
+
+                for (let j = 0; j < td.length; j++) {
+                    if (td[j]) {
+                        const txtValue = td[j].textContent || td[j].innerText;
+                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+
+                tr[i].style.display = found ? '' : 'none';
+            }
+        }
+
+        // Toggle doctor availability
+        async function toggleAvailability(doctorId) {
+            if (!confirm('هل أنت متأكد من تغيير حالة توفر الطبيب؟')) {
+                return;
+            }
+
+            try {
+                const response = await fetch('@Url.Action("ToggleDoctorAvailability", "Admin")', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': '@Html.AntiForgeryToken()'
+                    },
+                    body: JSON.stringify({ doctorId: doctorId })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    location.reload();
+                } else {
+                    alert('حدث خطأ: ' + result.message);
+                }
+            } catch (error) {
+                alert('حدث خطأ في الاتصال');
+            }
+        }
+
+        // Delete doctor
+        async function deleteDoctor(doctorId, doctorName) {
+            if (!confirm(`هل أنت متأكد من حذف الطبيب "${doctorName}"؟\n\nسيتم حذف جميع البيانات المرتبطة به.`)) {
+                return;
+            }
+
+            try {
+                const response = await fetch('@Url.Action("DeleteDoctor", "Admin")', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ doctorId: doctorId })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    // Remove row with animation
+                    const row = document.getElementById('doctor-' + doctorId);
+                    row.style.transition = 'all 0.3s';
+                    row.style.opacity = '0';
+                    row.style.transform = 'translateX(20px)';
+
+                    setTimeout(() => {
+                        row.remove();
+
+                        // Check if table is empty
+                        const tbody = document.querySelector('#doctorsTable tbody');
+                        if (tbody.children.length === 0) {
+                            location.reload();
+                        }
+                    }, 300);
+                } else {
+                    alert('حدث خطأ: ' + result.message);
+                }
+            } catch (error) {
+                alert('حدث خطأ في الاتصال');
+            }
+        }
+    </script>
+}

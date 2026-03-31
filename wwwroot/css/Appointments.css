@@ -1,0 +1,501 @@
+﻿/* ═══════════════════════════════════════════════════════════
+   📅 Appointments System - Detailed Views
+   ═══════════════════════════════════════════════════════════ */
+
+:root {
+    --appointment-primary: #3B82F6;
+    --appointment-secondary: #2563EB;
+    --appointment-success: #10B981;
+    --appointment-warning: #F59E0B;
+    --appointment-danger: #EF4444;
+    --appointment-gradient: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+    --appointment-bg: #F8FAFC;
+}
+
+.appointment-details-page {
+    background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+    min-height: 100vh;
+    padding: 2rem 0;
+}
+
+.appointment-details-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Appointment Details Card
+   ═══════════════════════════════════════════════════════════ */
+
+.appointment-details-card {
+    background: white;
+    border-radius: 20px;
+    padding: 2.5rem;
+    box-shadow: 0 10px 30px rgba(59, 130, 246, 0.15);
+    margin-bottom: 2rem;
+    border: 2px solid rgba(59, 130, 246, 0.1);
+}
+
+.appointment-status-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 2px solid #EFF6FF;
+}
+
+.appointment-id {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.appointment-id-icon {
+    width: 50px;
+    height: 50px;
+    background: var(--appointment-gradient);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.appointment-id-text h3 {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #1E293B;
+    margin: 0 0 0.3rem 0;
+}
+
+.appointment-id-text p {
+    color: #64748B;
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.appointment-status-large {
+    padding: 12px 28px;
+    border-radius: 12px;
+    font-weight: 800;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.status-scheduled-large {
+    background: linear-gradient(135deg, #DBEAFE 0%, #BFDBFE 100%);
+    color: #1E40AF;
+    border: 2px solid #93C5FD;
+}
+
+.status-completed-large {
+    background: linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 100%);
+    color: #065F46;
+    border: 2px solid #6EE7B7;
+}
+
+.status-cancelled-large {
+    background: linear-gradient(135deg, #FEE2E2 0%, #FECACA 100%);
+    color: #991B1B;
+    border: 2px solid #FCA5A5;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Doctor & Patient Info
+   ═══════════════════════════════════════════════════════════ */
+
+.appointment-participants {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.participant-card {
+    background: linear-gradient(135deg, #F8FAFC 0%, #EFF6FF 100%);
+    border-radius: 16px;
+    padding: 2rem;
+    border: 2px solid #DBEAFE;
+}
+
+.participant-header {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.participant-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: var(--appointment-gradient);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.2rem;
+    color: white;
+    font-weight: 800;
+    box-shadow: 0 6px 16px rgba(59, 130, 246, 0.3);
+}
+
+.participant-info h4 {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #1E293B;
+    margin: 0 0 0.5rem 0;
+}
+
+.participant-role {
+    color: var(--appointment-primary);
+    font-weight: 600;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.participant-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.participant-detail-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #475569;
+    font-size: 0.95rem;
+}
+
+    .participant-detail-item i {
+        width: 25px;
+        color: var(--appointment-primary);
+        font-size: 1.1rem;
+    }
+
+/* ═══════════════════════════════════════════════════════════
+   Appointment Info Grid
+   ═══════════════════════════════════════════════════════════ */
+
+.appointment-info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.info-card {
+    background: linear-gradient(135deg, #FFFFFF 0%, #F8FAFC 100%);
+    border-radius: 14px;
+    padding: 1.5rem;
+    border: 2px solid #E2E8F0;
+    transition: all 0.3s ease;
+}
+
+    .info-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 20px rgba(59, 130, 246, 0.15);
+        border-color: var(--appointment-primary);
+    }
+
+.info-card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 1rem;
+}
+
+.info-card-icon {
+    width: 45px;
+    height: 45px;
+    background: var(--appointment-gradient);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.3rem;
+}
+
+.info-card-title {
+    font-size: 0.9rem;
+    color: #64748B;
+    font-weight: 600;
+}
+
+.info-card-value {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: #1E293B;
+    line-height: 1.4;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Reason Section
+   ═══════════════════════════════════════════════════════════ */
+
+.appointment-reason-section {
+    background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+    border-radius: 16px;
+    padding: 2rem;
+    border: 2px solid #FCD34D;
+    margin-bottom: 2rem;
+}
+
+.reason-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 1rem;
+}
+
+.reason-icon {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+}
+
+.reason-header h4 {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: #92400E;
+    margin: 0;
+}
+
+.reason-content {
+    background: rgba(255, 255, 255, 0.7);
+    padding: 1.5rem;
+    border-radius: 12px;
+    color: #78350F;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    font-weight: 500;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Action Buttons
+   ═══════════════════════════════════════════════════════════ */
+
+.appointment-actions-section {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.action-btn {
+    padding: 1.2rem;
+    border-radius: 14px;
+    border: none;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    text-decoration: none;
+}
+
+.action-btn-primary {
+    background: var(--appointment-gradient);
+    color: white;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+    .action-btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+    }
+
+.action-btn-warning {
+    background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+    color: #92400E;
+    border: 2px solid #FCD34D;
+}
+
+    .action-btn-warning:hover {
+        background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+        color: white;
+        transform: translateY(-3px);
+    }
+
+.action-btn-danger {
+    background: linear-gradient(135deg, #FEE2E2 0%, #FECACA 100%);
+    color: #991B1B;
+    border: 2px solid #FCA5A5;
+}
+
+    .action-btn-danger:hover {
+        background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+        color: white;
+        transform: translateY(-3px);
+    }
+
+/* ═══════════════════════════════════════════════════════════
+   Reschedule Form
+   ═══════════════════════════════════════════════════════════ */
+
+.reschedule-form {
+    background: white;
+    border-radius: 18px;
+    padding: 2.5rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.reschedule-warning {
+    background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    border-right: 4px solid #F59E0B;
+}
+
+.reschedule-warning-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 1rem;
+}
+
+.reschedule-warning-icon {
+    font-size: 2rem;
+    color: #F59E0B;
+}
+
+.reschedule-warning h4 {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #92400E;
+    margin: 0;
+}
+
+.reschedule-warning p {
+    color: #78350F;
+    margin: 0;
+    line-height: 1.6;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Cancel Page
+   ═══════════════════════════════════════════════════════════ */
+
+.cancel-confirmation {
+    background: linear-gradient(135deg, #FEE2E2 0%, #FECACA 100%);
+    border-radius: 18px;
+    padding: 3rem;
+    text-align: center;
+    border: 3px solid #FCA5A5;
+    margin-bottom: 2rem;
+}
+
+.cancel-icon {
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 2rem;
+    font-size: 3rem;
+    color: white;
+    box-shadow: 0 10px 30px rgba(239, 68, 68, 0.4);
+}
+
+.cancel-confirmation h2 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #991B1B;
+    margin-bottom: 1rem;
+}
+
+.cancel-confirmation p {
+    font-size: 1.1rem;
+    color: #B91C1C;
+    margin-bottom: 2rem;
+    line-height: 1.7;
+}
+
+.cancel-form {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Medical Record Link
+   ═══════════════════════════════════════════════════════════ */
+
+.medical-record-link {
+    background: linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 100%);
+    border-radius: 16px;
+    padding: 2rem;
+    border: 2px solid #6EE7B7;
+    margin-top: 2rem;
+}
+
+.medical-record-link-header {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.medical-record-icon {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.8rem;
+}
+
+.medical-record-link h4 {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #065F46;
+    margin: 0;
+}
+
+.medical-record-link p {
+    color: #047857;
+    margin: 0 0 1.5rem 0;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Responsive
+   ═══════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+    .appointment-participants {
+        grid-template-columns: 1fr;
+    }
+
+    .appointment-info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .appointment-actions-section {
+        grid-template-columns: 1fr;
+    }
+}

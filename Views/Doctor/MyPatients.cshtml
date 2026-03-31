@@ -1,0 +1,157 @@
+﻿@model IEnumerable<SmartHealthcareSystem.Models.Patient>
+@{
+    ViewData["Title"] = "مرضاي";
+}
+
+<link rel="stylesheet" href="~/css/doctor.css" asp-append-version="true" />
+
+<div class="doctor-dashboard">
+    <div class="container">
+        <!-- Page Header -->
+        <div class="page-header-fancy">
+            <div class="header-content-fancy">
+                <div class="icon-circle">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div>
+                    <h1>قائمة مرضاي</h1>
+                    <p>عرض وإدارة جميع المرضى المسجلين معك</p>
+                </div>
+            </div>
+            <a asp-action="Dashboard" class="btn-back">
+                <i class="fas fa-arrow-right"></i>
+                العودة
+            </a>
+        </div>
+
+        <!-- Search and Stats -->
+        <div class="search-stats-section">
+            <div class="search-box-fancy">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="ابحث عن مريض بالاسم، الهاتف، أو فصيلة الدم..." onkeyup="searchPatients()">
+            </div>
+            <div class="mini-stats">
+                <div class="mini-stat">
+                    <i class="fas fa-users"></i>
+                    <div>
+                        <h4>@Model.Count()</h4>
+                        <p>إجمالي المرضى</p>
+                    </div>
+                </div>
+                <div class="mini-stat">
+                    <i class="fas fa-male"></i>
+                    <div>
+                        <h4>@Model.Count(p => p.Gender == "Male")</h4>
+                        <p>ذكور</p>
+                    </div>
+                </div>
+                <div class="mini-stat">
+                    <i class="fas fa-female"></i>
+                    <div>
+                        <h4>@Model.Count(p => p.Gender == "Female")</h4>
+                        <p>إناث</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Patients Grid -->
+        <div class="patients-grid" id="patientsGrid">
+            @if (Model.Any())
+            {
+                @foreach (var patient in Model)
+                {
+                    <div class="patient-card-fancy" data-name="@patient.User?.FullName" data-phone="@patient.User?.Phone" data-blood="@patient.BloodType">
+                        <div class="patient-card-header">
+                            <div class="patient-avatar-large">
+                                @(patient.User?.FullName?.Substring(0, 1) ?? "م")
+                            </div>
+                            <div class="patient-gender-badge @(patient.Gender == "Male" ? "male" : "female")">
+                                <i class="fas fa-@(patient.Gender == "Male" ? "mars" : "venus")"></i>
+                            </div>
+                        </div>
+                        <div class="patient-card-body">
+                            <h3>@(patient.User?.FullName ?? "مريض")</h3>
+                            <div class="patient-info-grid">
+                                <div class="info-item">
+                                    <i class="fas fa-phone"></i>
+                                    <span>@(patient.User?.Phone ?? "غير محدد")</span>
+                                </div>
+                                <div class="info-item">
+                                    <i class="fas fa-envelope"></i>
+                                    <span>@(patient.User?.Email ?? "غير محدد")</span>
+                                </div>
+                                @if (patient.DateOfBirth != default(DateTime))
+                                {
+                                    <div class="info-item">
+                                        <i class="fas fa-birthday-cake"></i>
+                                        <span>@patient.DateOfBirth.ToString("yyyy-MM-dd") (@(DateTime.Now.Year - patient.DateOfBirth.Year) سنة)</span>
+                                    </div>
+                                }
+                                @if (!string.IsNullOrEmpty(patient.BloodType))
+                                {
+                                    <div class="info-item">
+                                        <i class="fas fa-tint"></i>
+                                        <span class="blood-badge-fancy">@patient.BloodType</span>
+                                    </div>
+                                }
+                                @if (!string.IsNullOrEmpty(patient.Address))
+                                {
+                                    <div class="info-item">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                        <span>@patient.Address</span>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <div class="patient-card-footer">
+                            <button class="btn-action btn-view" onclick="viewPatientDetails(@patient.PatientId)">
+                                <i class="fas fa-eye"></i>
+                                عرض التفاصيل
+                            </button>
+                            <button class="btn-action btn-appointment">
+                                <i class="fas fa-calendar-plus"></i>
+                                موعد جديد
+                            </button>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="empty-state-fancy">
+                    <i class="fas fa-user-slash"></i>
+                    <h3>لا يوجد مرضى</h3>
+                    <p>لم تستقبل أي مرضى بعد</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function searchPatients() {
+            const input = document.getElementById('searchInput').value.toUpperCase();
+            const cards = document.querySelectorAll('.patient-card-fancy');
+
+            cards.forEach(card => {
+                const name = card.getAttribute('data-name')?.toUpperCase() || '';
+                const phone = card.getAttribute('data-phone')?.toUpperCase() || '';
+                const blood = card.getAttribute('data-blood')?.toUpperCase() || '';
+
+                if (name.includes(input) || phone.includes(input) || blood.includes(input)) {
+                    card.style.display = '';
+                    card.style.animation = 'fadeIn 0.3s ease';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function viewPatientDetails(patientId) {
+            alert('عرض تفاصيل المريض رقم: ' + patientId);
+            // يمكنك إضافة modal أو redirect لصفحة تفاصيل
+        }
+    </script>
+}

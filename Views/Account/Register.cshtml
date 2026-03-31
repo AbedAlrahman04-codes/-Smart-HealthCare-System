@@ -1,0 +1,492 @@
+﻿@model SmartHealthcareSystem.ViewModels.RegisterViewModel
+
+@{
+    ViewData["Title"] = "إنشاء حساب جديد";
+    Layout = "_Layout";
+}
+
+<style>
+    /* ═══════════════════════════════════════════════════════════
+       Modern Register Page Design
+       ═══════════════════════════════════════════════════════════ */
+
+    .register-page {
+        min-height: 100vh;
+        background: linear-gradient(135deg, #E8F4F8 0%, #F0F9FF 100%);
+        padding: 2rem 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .register-container {
+        max-width: 900px;
+        width: 100%;
+        background: white;
+        border-radius: 24px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        margin: 0 auto;
+    }
+
+    /* Header */
+    .register-header {
+        background: linear-gradient(135deg, #1A7FA0, #4DB8E8);
+        color: white;
+        text-align: center;
+        padding: 3rem 2rem;
+    }
+
+    .register-header-icon {
+        width: 80px;
+        height: 80px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        font-size: 2.5rem;
+    }
+
+    .register-header h2 {
+        font-size: 2rem;
+        margin: 0 0 0.5rem 0;
+        font-weight: 700;
+    }
+
+    .register-header p {
+        font-size: 1.1rem;
+        margin: 0;
+        opacity: 0.95;
+    }
+
+    /* Body */
+    .register-body {
+        padding: 3rem;
+    }
+
+    .register-form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .register-form-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .register-form-grid-full {
+        grid-column: 1 / -1;
+    }
+
+    .register-label {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 0.75rem;
+        font-size: 1rem;
+    }
+
+        .register-label i {
+            color: #1A7FA0;
+            font-size: 1.1rem;
+        }
+
+    .required {
+        color: #DC2626;
+    }
+
+    .register-input,
+    .register-select {
+        width: 100%;
+        padding: 0.875rem 1rem;
+        border: 2px solid #E5E7EB;
+        border-radius: 12px;
+        font-size: 1rem;
+        transition: all 0.3s;
+        background: white;
+    }
+
+        .register-input:focus,
+        .register-select:focus {
+            outline: none;
+            border-color: #1A7FA0;
+            box-shadow: 0 0 0 3px rgba(26, 127, 160, 0.1);
+        }
+
+    .register-password-group {
+        position: relative;
+    }
+
+    .register-password-toggle {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: #6B7280;
+        cursor: pointer;
+        padding: 0.5rem;
+        transition: color 0.3s;
+    }
+
+        .register-password-toggle:hover {
+            color: #1A7FA0;
+        }
+
+    .has-toggle {
+        padding-left: 3rem;
+    }
+
+    /* Terms */
+    .register-terms {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        margin: 2rem 0;
+        padding: 1.5rem;
+        background: #F9FAFB;
+        border-radius: 12px;
+    }
+
+        .register-terms input[type="checkbox"] {
+            margin-top: 0.25rem;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .register-terms label {
+            color: #374151;
+            line-height: 1.6;
+            cursor: pointer;
+        }
+
+        .register-terms a {
+            color: #1A7FA0;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+            .register-terms a:hover {
+                text-decoration: underline;
+            }
+
+    /* Submit Button */
+    .register-submit {
+        width: 100%;
+        padding: 1.25rem;
+        background: linear-gradient(135deg, #1A7FA0, #4DB8E8);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        transition: all 0.3s;
+        box-shadow: 0 8px 20px rgba(26, 127, 160, 0.3);
+    }
+
+        .register-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(26, 127, 160, 0.4);
+        }
+
+        .register-submit:active {
+            transform: translateY(0);
+        }
+
+    /* Footer */
+    .register-footer {
+        text-align: center;
+        padding: 2rem;
+        border-top: 2px solid #F3F4F6;
+        background: #F9FAFB;
+    }
+
+        .register-footer p {
+            color: #6B7280;
+            margin: 0;
+            font-size: 1rem;
+        }
+
+        .register-footer a {
+            color: #1A7FA0;
+            text-decoration: none;
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+
+            .register-footer a:hover {
+                text-decoration: underline;
+            }
+
+    /* Validation */
+    .register-validation {
+        color: #DC2626;
+        font-size: 0.875rem;
+        margin-top: 0.5rem;
+    }
+
+    /* Error Message */
+    .register-message {
+        padding: 1rem 1.5rem;
+        border-radius: 12px;
+        margin-bottom: 2rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+        .register-message.error {
+            background: #FEE2E2;
+            color: #991B1B;
+            border: 2px solid #FCA5A5;
+        }
+
+        .register-message i {
+            font-size: 1.25rem;
+        }
+
+    /* Responsive */
+    @@media (max-width: 768px) {
+        .register-container
+
+    {
+        margin: 1rem;
+    }
+
+    .register-header {
+        padding: 2rem 1.5rem;
+    }
+
+        .register-header h2 {
+            font-size: 1.5rem;
+        }
+
+    .register-body {
+        padding: 2rem 1.5rem;
+    }
+
+    .register-form-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    }
+</style>
+
+<div class="register-page">
+    <div class="register-container">
+        <!-- Header -->
+        <div class="register-header">
+            <div class="register-header-icon">
+                <i class="fas fa-user-plus"></i>
+            </div>
+            <h2>إنشاء حساب جديد</h2>
+            <p>انضم إلينا وابدأ رحلتك في الرعاية الصحية الذكية</p>
+        </div>
+
+        <!-- Body -->
+        <div class="register-body">
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="register-message error">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span>@TempData["ErrorMessage"]</span>
+                </div>
+            }
+
+            <form asp-action="Register" method="post">
+                <div class="register-form-grid">
+                    <!-- Full Name -->
+                    <div class="register-form-group">
+                        <label class="register-label" for="FullName">
+                            <i class="fas fa-user"></i>
+                            <span>الاسم الكامل</span>
+                            <span class="required">*</span>
+                        </label>
+                        <input type="text" class="register-input" id="FullName" name="FullName"
+                               placeholder="أدخل اسمك الكامل" required />
+                        <span asp-validation-for="FullName" class="register-validation"></span>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="register-form-group">
+                        <label class="register-label" for="Email">
+                            <i class="fas fa-envelope"></i>
+                            <span>البريد الإلكتروني</span>
+                            <span class="required">*</span>
+                        </label>
+                        <input type="email" class="register-input" id="Email" name="Email"
+                               placeholder="example@email.com" required />
+                        <span asp-validation-for="Email" class="register-validation"></span>
+                    </div>
+
+                    <!-- Username -->
+                    <div class="register-form-group">
+                        <label class="register-label" for="Username">
+                            <i class="fas fa-at"></i>
+                            <span>اسم المستخدم</span>
+                            <span class="required">*</span>
+                        </label>
+                        <input type="text" class="register-input" id="Username" name="Username"
+                               placeholder="اختر اسم مستخدم فريد" required />
+                        <span asp-validation-for="Username" class="register-validation"></span>
+                    </div>
+
+                    <!-- Phone -->
+                    <div class="register-form-group">
+                        <label class="register-label" for="Phone">
+                            <i class="fas fa-phone"></i>
+                            <span>رقم الهاتف</span>
+                            <span class="required">*</span>
+                        </label>
+                        <input type="tel" class="register-input" id="Phone" name="Phone"
+                               placeholder="07xxxxxxxx" required />
+                        <span asp-validation-for="Phone" class="register-validation"></span>
+                    </div>
+
+                    <!-- Date of Birth -->
+                    <div class="register-form-group">
+                        <label class="register-label" for="DateOfBirth">
+                            <i class="fas fa-calendar"></i>
+                            <span>تاريخ الميلاد</span>
+                        </label>
+                        <input type="date" class="register-input" id="DateOfBirth" name="DateOfBirth" />
+                        <span asp-validation-for="DateOfBirth" class="register-validation"></span>
+                    </div>
+
+                    <!-- Gender -->
+                    <div class="register-form-group">
+                        <label class="register-label" for="Gender">
+                            <i class="fas fa-venus-mars"></i>
+                            <span>الجنس</span>
+                        </label>
+                        <select class="register-select" id="Gender" name="Gender">
+                            <option value="">اختر الجنس</option>
+                            <option value="Male">ذكر</option>
+                            <option value="Female">أنثى</option>
+                        </select>
+                        <span asp-validation-for="Gender" class="register-validation"></span>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="register-form-group">
+                        <label class="register-label" for="Password">
+                            <i class="fas fa-lock"></i>
+                            <span>كلمة المرور</span>
+                            <span class="required">*</span>
+                        </label>
+                        <div class="register-password-group">
+                            <input type="password" class="register-input has-toggle" id="Password" name="Password"
+                                   placeholder="••••••••" required minlength="6" />
+                            <button type="button" class="register-password-toggle" onclick="togglePassword('Password')">
+                                <i class="fas fa-eye" id="Password-icon"></i>
+                            </button>
+                        </div>
+                        <span asp-validation-for="Password" class="register-validation"></span>
+                    </div>
+
+                    <!-- Confirm Password -->
+                    <div class="register-form-group">
+                        <label class="register-label" for="ConfirmPassword">
+                            <i class="fas fa-lock"></i>
+                            <span>تأكيد كلمة المرور</span>
+                            <span class="required">*</span>
+                        </label>
+                        <div class="register-password-group">
+                            <input type="password" class="register-input has-toggle" id="ConfirmPassword" name="ConfirmPassword"
+                                   placeholder="••••••••" required minlength="6" />
+                            <button type="button" class="register-password-toggle" onclick="togglePassword('ConfirmPassword')">
+                                <i class="fas fa-eye" id="ConfirmPassword-icon"></i>
+                            </button>
+                        </div>
+                        <span asp-validation-for="ConfirmPassword" class="register-validation"></span>
+                    </div>
+
+                    <!-- Address -->
+                    <div class="register-form-group register-form-grid-full">
+                        <label class="register-label" for="Address">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>العنوان</span>
+                        </label>
+                        <input type="text" class="register-input" id="Address" name="Address"
+                               placeholder="المدينة، الحي، الشارع" />
+                        <span asp-validation-for="Address" class="register-validation"></span>
+                    </div>
+                </div>
+
+                <!-- Terms -->
+                <div class="register-terms">
+                    <input type="checkbox" id="terms" required />
+                    <label for="terms">
+                        أوافق على <a href="#">الشروط والأحكام</a> و <a href="#">سياسة الخصوصية</a> الخاصة بالنظام
+                    </label>
+                </div>
+
+                <!-- Submit -->
+                <button type="submit" class="register-submit">
+                    <i class="fas fa-user-plus"></i>
+                    <span>إنشاء الحساب</span>
+                </button>
+            </form>
+        </div>
+
+        <!-- Footer -->
+        <div class="register-footer">
+            <p>
+                لديك حساب بالفعل؟
+                <a asp-action="Login">تسجيل الدخول</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        function togglePassword(fieldId) {
+            const input = document.getElementById(fieldId);
+            const icon = document.getElementById(fieldId + '-icon');
+
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        document.getElementById('ConfirmPassword').addEventListener('input', function() {
+            const password = document.getElementById('Password').value;
+            const confirmPassword = this.value;
+
+            if (password !== confirmPassword) {
+                this.setCustomValidity('كلمتا المرور غير متطابقتين');
+            } else {
+                this.setCustomValidity('');
+            }
+        });
+
+        document.querySelector('form').addEventListener('submit', function() {
+            const submitBtn = document.querySelector('.register-submit');
+            submitBtn.classList.add('loading');
+            submitBtn.innerHTML = '<span>جاري إنشاء الحساب...</span>';
+        });
+    </script>
+}

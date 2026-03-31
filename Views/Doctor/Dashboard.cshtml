@@ -1,0 +1,331 @@
+﻿@{
+    ViewData["Title"] = "لوحة تحكم الطبيب";
+    var doctor = ViewBag.DoctorInfo as SmartHealthcareSystem.Models.Doctor;
+}
+
+<link rel="stylesheet" href="~/css/doctor.css" asp-append-version="true" />
+
+<div class="doctor-dashboard">
+    <div class="container">
+        <!-- Welcome Header with Glassmorphism -->
+        <div class="welcome-section">
+            <div class="welcome-content">
+                <div class="doctor-avatar">
+                    <div class="avatar-circle">
+                        @(doctor?.User?.FullName?.Substring(0, 1) ?? "د")
+                    </div>
+                    <div class="status-indicator @(doctor?.IsAvailable == true ? "online" : "offline")">
+                        <span></span>
+                    </div>
+                </div>
+                <div class="welcome-text">
+                    <h1>مرحباً، <span class="gradient-text">د. @(doctor?.User?.FullName ?? "الطبيب")</span></h1>
+                    <p>@doctor?.Specialization</p>
+                    <div class="quick-stats">
+                        <span class="stat-badge">
+                            <i class="fas fa-calendar-day"></i>
+                            @ViewBag.TodayAppointments موعد اليوم
+                        </span>
+                        <span class="stat-badge">
+                            <i class="fas fa-users"></i>
+                            @ViewBag.TotalPatients مريض إجمالي
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="welcome-actions">
+                <button class="btn-glass" onclick="toggleAvailability()">
+                    <i class="fas @(doctor?.IsAvailable == true ? "fa-toggle-on" : "fa-toggle-off")"></i>
+                    <span id="availabilityText">@(doctor?.IsAvailable == true ? "متاح" : "غير متاح")</span>
+                </button>
+                <a asp-action="Profile" class="btn-glass">
+                    <i class="fas fa-user-circle"></i>
+                    الملف الشخصي
+                </a>
+            </div>
+        </div>
+
+        <!-- Today's Overview Cards with 3D Effect -->
+        <div class="section-header">
+            <h2><i class="fas fa-calendar-day"></i> نظرة على اليوم</h2>
+            <span class="date-badge">@DateTime.Today.ToString("dddd، dd MMMM yyyy", new System.Globalization.CultureInfo("ar-SA"))</span>
+        </div>
+
+        <div class="stats-grid today-stats">
+            <div class="stat-card card-primary">
+                <div class="stat-icon">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+                <div class="stat-content">
+                    <h3 class="stat-number" data-target="@ViewBag.TodayAppointments">0</h3>
+                    <p>مواعيد اليوم</p>
+                </div>
+                <div class="stat-chart">
+                    <div class="mini-circle-chart" data-percent="@(ViewBag.TodayAppointments > 0 ? 100 : 0)"></div>
+                </div>
+            </div>
+
+            <div class="stat-card card-success">
+                <div class="stat-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="stat-content">
+                    <h3 class="stat-number" data-target="@ViewBag.TodayCompletedAppointments">0</h3>
+                    <p>تم إنجازها</p>
+                </div>
+                <div class="stat-chart">
+                    <div class="mini-circle-chart" data-percent="@(ViewBag.TodayAppointments > 0 ? (ViewBag.TodayCompletedAppointments * 100 / ViewBag.TodayAppointments) : 0)"></div>
+                </div>
+            </div>
+
+            <div class="stat-card card-warning">
+                <div class="stat-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="stat-content">
+                    <h3 class="stat-number" data-target="@ViewBag.TodayPendingAppointments">0</h3>
+                    <p>قيد الانتظار</p>
+                </div>
+                <div class="stat-chart">
+                    <div class="mini-circle-chart" data-percent="@(ViewBag.TodayAppointments > 0 ? (ViewBag.TodayPendingAppointments * 100 / ViewBag.TodayAppointments) : 0)"></div>
+                </div>
+            </div>
+
+            <div class="stat-card card-info">
+                <div class="stat-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="stat-content">
+                    <h3 class="stat-number" data-target="@ViewBag.WeekAppointments">0</h3>
+                    <p>مواعيد الأسبوع</p>
+                </div>
+                <div class="stat-chart">
+                    <div class="mini-bar-chart">
+                        <div class="bar" style="height: 60%"></div>
+                        <div class="bar" style="height: 80%"></div>
+                        <div class="bar" style="height: 40%"></div>
+                        <div class="bar" style="height: 90%"></div>
+                        <div class="bar" style="height: 70%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Overall Statistics -->
+        <div class="section-header">
+            <h2><i class="fas fa-chart-bar"></i> الإحصائيات العامة</h2>
+        </div>
+
+        <div class="stats-grid overall-stats">
+            <div class="stat-card-large card-gradient-1">
+                <div class="card-background">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 class="stat-number-large" data-target="@ViewBag.TotalPatients">0</h3>
+                    <p style="color:black">إجمالي المرضى</p>
+                    <a asp-action="MyPatients" class="stat-link">
+                        عرض الكل <i class="fas fa-arrow-left"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="stat-card-large card-gradient-2">
+                <div class="card-background">
+                    <i class="fas fa-calendar-alt"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 class="stat-number-large" data-target="@ViewBag.TotalAppointments">0</h3>
+                    <p style="color:black">إجمالي المواعيد</p>
+                    <a asp-action="Appointments" class="stat-link">
+                        عرض الكل <i class="fas fa-arrow-left"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="stat-card-large card-gradient-3">
+                <div class="card-background">
+                    <i class="fas fa-check-double"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 class="stat-number-large" data-target="@ViewBag.CompletedAppointments">0</h3>
+                    <p style="color:black">المواعيد المكتملة</p>
+                    <div class="progress-ring">
+                        <svg width="60" height="60">
+                            <circle cx="30" cy="30" r="25"></circle>
+                            <circle cx="30" cy="30" r="25"
+                                    style="stroke-dashoffset: @(157 - (ViewBag.TotalAppointments > 0 ? (ViewBag.CompletedAppointments * 157 / ViewBag.TotalAppointments) : 0))"></circle>
+                        </svg>
+                        <span>@(ViewBag.TotalAppointments > 0 ? Math.Round((double)ViewBag.CompletedAppointments * 100 / ViewBag.TotalAppointments) : 0)%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Upcoming Appointments & Recent Patients -->
+        <div class="content-grid">
+            <!-- Upcoming Appointments -->
+            <div class="content-section">
+                <div class="section-header">
+                    <h3><i class="fas fa-calendar-plus"></i> المواعيد القادمة</h3>
+                    <a asp-action="Appointments" class="view-all-link">عرض الكل</a>
+                </div>
+                <div class="appointments-list">
+                    @if (ViewBag.UpcomingAppointments != null && ((List<SmartHealthcareSystem.Models.Appointment>)ViewBag.UpcomingAppointments).Any())
+                    {
+                        @foreach (var appointment in (List<SmartHealthcareSystem.Models.Appointment>)ViewBag.UpcomingAppointments)
+                        {
+                            <div class="appointment-card">
+                                <div class="appointment-avatar">
+                                    @(appointment.Patient?.User?.FullName?.Substring(0, 1) ?? "م")
+                                </div>
+                                <div class="appointment-info">
+                                    <h4>@(appointment.Patient?.User?.FullName ?? "مريض")</h4>
+                                    <p class="appointment-time">
+                                        <i class="fas fa-clock"></i>
+                                        @appointment.AppointmentDate.ToString("dd/MM/yyyy - hh:mm tt")
+                                    </p>
+                                </div>
+                                <div class="appointment-status status-@appointment.Status.ToLower()">
+                                    @appointment.Status
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="empty-state">
+                            <i class="fas fa-calendar-times"></i>
+                            <p>لا توجد مواعيد قادمة</p>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Recent Patients -->
+            <div class="content-section">
+                <div class="section-header">
+                    <h3><i class="fas fa-user-friends"></i> أحدث المرضى</h3>
+                    <a asp-action="MyPatients" class="view-all-link">عرض الكل</a>
+                </div>
+                <div class="patients-list">
+                    @if (ViewBag.RecentPatients != null && ((List<SmartHealthcareSystem.Models.Patient>)ViewBag.RecentPatients).Any())
+                    {
+                        @foreach (var patient in (List<SmartHealthcareSystem.Models.Patient>)ViewBag.RecentPatients)
+                        {
+                            <div class="patient-card">
+                                <div class="patient-avatar">
+                                    @(patient.User?.FullName?.Substring(0, 1) ?? "م")
+                                </div>
+                                <div class="patient-info">
+                                    <h4>@(patient.User?.FullName ?? "مريض")</h4>
+                                    <p class="patient-details">
+                                        <span><i class="fas fa-phone"></i> @(patient.User?.Phone ?? "غير محدد")</span>
+                                        @if (!string.IsNullOrEmpty(patient.BloodType))
+                                        {
+                                            <span class="blood-badge">@patient.BloodType</span>
+                                        }
+                                    </p>
+                                </div>
+                                <button class="btn-icon-small" title="عرض التفاصيل">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="empty-state">
+                            <i class="fas fa-user-slash"></i>
+                            <p>لا توجد بيانات مرضى</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Number Counter Animation
+        function animateNumber(element) {
+            const target = parseInt(element.getAttribute('data-target'));
+            const duration = 2000;
+            const step = target / (duration / 16);
+            let current = 0;
+
+            const timer = setInterval(() => {
+                current += step;
+                if (current >= target) {
+                    element.textContent = target;
+                    clearInterval(timer);
+                } else {
+                    element.textContent = Math.floor(current);
+                }
+            }, 16);
+        }
+
+        // Animate all numbers on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.stat-number, .stat-number-large').forEach(animateNumber);
+        });
+
+        // Toggle Availability
+        async function toggleAvailability() {
+            try {
+                const response = await fetch('/Doctor/ToggleAvailability', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    const indicator = document.querySelector('.status-indicator');
+                    const text = document.getElementById('availabilityText');
+                    const icon = document.querySelector('.btn-glass i');
+
+                    if (data.isAvailable) {
+                        indicator.classList.remove('offline');
+                        indicator.classList.add('online');
+                        text.textContent = 'متاح';
+                        icon.classList.remove('fa-toggle-off');
+                        icon.classList.add('fa-toggle-on');
+                    } else {
+                        indicator.classList.remove('online');
+                        indicator.classList.add('offline');
+                        text.textContent = 'غير متاح';
+                        icon.classList.remove('fa-toggle-on');
+                        icon.classList.add('fa-toggle-off');
+                    }
+
+                    // Show notification
+                    showNotification(data.message, 'success');
+                }
+            } catch (error) {
+                showNotification('حدث خطأ في الاتصال', 'error');
+            }
+        }
+
+        // Notification System
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+                <span>${message}</span>
+            `;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 100);
+
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+    </script>
+}

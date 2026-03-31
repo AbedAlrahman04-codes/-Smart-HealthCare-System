@@ -1,0 +1,260 @@
+﻿@{
+    ViewData["Title"] = "إضافة طبيب جديد";
+}
+
+<link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
+
+<div class="admin-page">
+    <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div>
+                <h1><i class="fas fa-user-plus"></i> إضافة طبيب جديد</h1>
+                <p>املأ البيانات التالية لإضافة طبيب جديد إلى النظام</p>
+            </div>
+            <div class="header-actions">
+                <a asp-action="ManageDoctors" class="btn-admin btn-secondary-admin">
+                    <i class="fas fa-arrow-right"></i>
+                    العودة إلى القائمة
+                </a>
+            </div>
+        </div>
+
+        <!-- Form -->
+        <div class="form-admin">
+            <form asp-action="AddDoctor" method="post">
+                @Html.AntiForgeryToken()
+
+                <!-- Personal Information -->
+                <div class="form-section">
+                    <h3><i class="fas fa-user"></i> المعلومات الشخصية</h3>
+                    <div class="form-grid">
+                        <div class="form-group-admin">
+                            <label class="form-label-admin">
+                                <span class="required">*</span>
+                                الاسم الكامل
+                            </label>
+                            <input type="text"
+                                   name="fullName"
+                                   class="form-control-admin"
+                                   placeholder="مثال: د. محمد أحمد"
+                                   required />
+                        </div>
+
+                        <div class="form-group-admin">
+                            <label class="form-label-admin">
+                                <span class="required">*</span>
+                                اسم المستخدم
+                            </label>
+                            <input type="text"
+                                   name="username"
+                                   class="form-control-admin"
+                                   placeholder="اختر اسم مستخدم فريد"
+                                   required />
+                        </div>
+
+                        <div class="form-group-admin">
+                            <label class="form-label-admin">
+                                <span class="required">*</span>
+                                البريد الإلكتروني
+                            </label>
+                            <input type="email"
+                                   name="email"
+                                   class="form-control-admin"
+                                   placeholder="doctor@example.com"
+                                   required />
+                        </div>
+
+                        <div class="form-group-admin">
+                            <label class="form-label-admin">
+                                <span class="required">*</span>
+                                رقم الهاتف
+                            </label>
+                            <input type="tel"
+                                   name="phone"
+                                   class="form-control-admin"
+                                   placeholder="07XXXXXXXX"
+                                   required />
+                        </div>
+
+                        <div class="form-group-admin">
+                            <label class="form-label-admin">
+                                <span class="required">*</span>
+                                كلمة المرور
+                            </label>
+                            <input type="password"
+                                   name="password"
+                                   class="form-control-admin"
+                                   placeholder="أدخل كلمة مرور قوية"
+                                   required />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Professional Information -->
+                <div class="form-section">
+                    <h3><i class="fas fa-stethoscope"></i> المعلومات المهنية</h3>
+                    <div class="form-grid">
+                        <div class="form-group-admin">
+                            <label class="form-label-admin">
+                                <span class="required">*</span>
+                                التخصص
+                            </label>
+                            <select name="specialization" class="form-control-admin" required>
+                                <option value="">اختر التخصص</option>
+                                <option value="طب عام">طب عام</option>
+                                <option value="طب الأطفال">طب الأطفال</option>
+                                <option value="طب القلب">طب القلب</option>
+                                <option value="طب الأسنان">طب الأسنان</option>
+                                <option value="طب العيون">طب العيون</option>
+                                <option value="طب الأنف والأذن والحنجرة">طب الأنف والأذن والحنجرة</option>
+                                <option value="طب الجلدية">طب الجلدية</option>
+                                <option value="طب النساء والتوليد">طب النساء والتوليد</option>
+                                <option value="طب العظام">طب العظام</option>
+                                <option value="طب الأعصاب">طب الأعصاب</option>
+                                <option value="الطب النفسي">الطب النفسي</option>
+                                <option value="جراحة عامة">جراحة عامة</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group-admin">
+                            <label class="form-label-admin">
+                                <span class="required">*</span>
+                                رقم الترخيص
+                            </label>
+                            <input type="text"
+                                   name="licenseNumber"
+                                   class="form-control-admin"
+                                   placeholder="MED-2024-XXX"
+                                   required />
+                        </div>
+
+                        <div class="form-group-admin">
+                            <label class="form-label-admin">
+                                <span class="required">*</span>
+                                رسوم الاستشارة (JOD)
+                            </label>
+                            <input type="number"
+                                   name="consultationFee"
+                                   class="form-control-admin"
+                                   placeholder="25.00"
+                                   step="0.01"
+                                   min="0"
+                                   required />
+                        </div>
+
+                        <div class="form-group-admin">
+                            <label class="form-label-admin">
+                                <span class="required">*</span>
+                                ساعات العمل
+                            </label>
+                            <input type="text"
+                                   name="workingHours"
+                                   class="form-control-admin"
+                                   placeholder="9:00 AM - 5:00 PM"
+                                   required />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Buttons -->
+                <div class="form-actions">
+                    <button type="submit" class="btn-admin btn-primary-admin">
+                        <i class="fas fa-save"></i>
+                        حفظ البيانات
+                    </button>
+                    <a asp-action="ManageDoctors" class="btn-admin btn-secondary-admin">
+                        <i class="fas fa-times"></i>
+                        إلغاء
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-section {
+        margin-bottom: 2.5rem;
+        padding-bottom: 2rem;
+        border-bottom: 2px solid #E8F4F8;
+    }
+
+        .form-section:last-of-type {
+            border-bottom: none;
+        }
+
+        .form-section h3 {
+            color: #2C3E50;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+        }
+
+            .form-section h3 i {
+                background: linear-gradient(135deg, #1A7FA0, #3B82F6);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+            }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: flex-start;
+        padding-top: 1rem;
+    }
+
+    .required {
+        color: #E74C3C;
+        margin-left: 4px;
+    }
+
+    select.form-control-admin {
+        cursor: pointer;
+    }
+</style>
+
+@section Scripts {
+    <script>
+        // Form validation
+        document.querySelector('form').addEventListener('submit', function(e) {
+            const password = document.querySelector('input[name="password"]').value;
+
+            if (password.length < 6) {
+                e.preventDefault();
+                alert('كلمة المرور يجب أن تكون 6 أحرف على الأقل');
+                return false;
+            }
+
+            // Show loading state
+            const submitBtn = this.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الحفظ...';
+        });
+
+        // Auto-generate username from full name
+        document.querySelector('input[name="fullName"]').addEventListener('blur', function() {
+            const usernameField = document.querySelector('input[name="username"]');
+
+            if (usernameField.value === '') {
+                const fullName = this.value.trim();
+                const username = fullName.toLowerCase()
+                    .replace(/د\./g, 'dr')
+                    .replace(/\s+/g, '')
+                    .replace(/[^a-z0-9]/g, '');
+
+                if (username) {
+                    usernameField.value = username;
+                }
+            }
+        });
+    </script>
+}

@@ -1,0 +1,306 @@
+﻿@model SmartHealthcareSystem.Models.MedicalRecord
+
+@{
+    ViewData["Title"] = "Medical Record Details";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/patient.css" asp-append-version="true" />
+}
+
+<div class="patient-page">
+    <div class="patient-container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="page-header-content">
+                <div class="page-title-section">
+                    <div class="page-icon">
+                        <i class="fas fa-file-medical-alt"></i>
+                    </div>
+                    <div class="page-title-text">
+                        <h1>Medical Record #@Model.RecordId</h1>
+                        <p>Detailed Information</p>
+                    </div>
+                </div>
+                <div class="page-actions">
+                    <a asp-action="MyRecords" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Back to Records</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Record Details Card -->
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="stat-card">
+                    <div class="stat-card-header" style="background: linear-gradient(135deg, #1A7FA0, #4DB8E8); color: white; padding: 1.5rem;">
+                        <h3 style="margin: 0;">
+                            <i class="fas fa-info-circle"></i>
+                            Medical Record Information
+                        </h3>
+                    </div>
+                    <div class="stat-card-body" style="padding: 2rem;">
+                        <div class="detail-row">
+                            <div class="detail-label">
+                                <i class="fas fa-user"></i>
+                                <strong>Patient Name</strong>
+                            </div>
+                            <div class="detail-value">
+                                @Model.Patient?.User?.FullName
+                            </div>
+                        </div>
+
+                        <div class="detail-row">
+                            <div class="detail-label">
+                                <i class="fas fa-user-md"></i>
+                                <strong>Doctor</strong>
+                            </div>
+                            <div class="detail-value">
+                                د. @Model.Doctor?.User?.FullName
+                                <br>
+                                <small class="text-muted">@Model.Doctor?.Specialization</small>
+                            </div>
+                        </div>
+
+                        <div class="detail-row">
+                            <div class="detail-label">
+                                <i class="fas fa-calendar"></i>
+                                <strong>Visit Date</strong>
+                            </div>
+                            <div class="detail-value">
+                                @Model.VisitDate.ToString("dddd, MMMM dd, yyyy")
+                            </div>
+                        </div>
+
+                        <div class="detail-row">
+                            <div class="detail-label">
+                                <i class="fas fa-stethoscope"></i>
+                                <strong>Diagnosis</strong>
+                            </div>
+                            <div class="detail-value">
+                                <span class="diagnosis-badge">@Model.Diagnosis</span>
+                            </div>
+                        </div>
+
+                        @if (!string.IsNullOrEmpty(Model.Symptoms))
+                        {
+                            <div class="detail-row">
+                                <div class="detail-label">
+                                    <i class="fas fa-notes-medical"></i>
+                                    <strong>Symptoms</strong>
+                                </div>
+                                <div class="detail-value">
+                                    @Model.Symptoms
+                                </div>
+                            </div>
+                        }
+
+                        @if (!string.IsNullOrEmpty(Model.Prescription))
+                        {
+                            <div class="detail-row">
+                                <div class="detail-label">
+                                    <i class="fas fa-prescription"></i>
+                                    <strong>Prescription</strong>
+                                </div>
+                                <div class="detail-value prescription-box">
+                                    @Model.Prescription
+                                </div>
+                            </div>
+                        }
+
+                        @if (!string.IsNullOrEmpty(Model.Notes))
+                        {
+                            <div class="detail-row">
+                                <div class="detail-label">
+                                    <i class="fas fa-sticky-note"></i>
+                                    <strong>Additional Notes</strong>
+                                </div>
+                                <div class="detail-value">
+                                    @Model.Notes
+                                </div>
+                            </div>
+                        }
+
+                        <div class="detail-row">
+                            <div class="detail-label">
+                                <i class="fas fa-clock"></i>
+                                <strong>Created At</strong>
+                            </div>
+                            <div class="detail-value">
+                                @Model.CreatedAt.ToString("MMM dd, yyyy hh:mm tt")
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+         @*    <!-- Side Info -->
+            <div class="col-lg-4">
+                <div class="stat-card">
+                    <div class="stat-card-header" style="background: #f8f9fa; padding: 1rem;">
+                        <h4 style="margin: 0; color: #1A7FA0;">
+                            <i class="fas fa-info-circle"></i>
+                            Quick Info
+                        </h4>
+                    </div>
+                    <div class="stat-card-body" style="padding: 1.5rem;">
+                        <div class="quick-info-item">
+                            <i class="fas fa-hashtag"></i>
+                            <div>
+                                <strong>Record ID</strong>
+                                <p>#@Model.RecordId</p>
+                            </div>
+                        </div>
+
+                        <div class="quick-info-item">
+                            <i class="fas fa-hospital-user"></i>
+                            <div>
+                                <strong>Patient ID</strong>
+                                <p>#@Model.PatientId</p>
+                            </div>
+                        </div>
+
+                        <div class="quick-info-item">
+                            <i class="fas fa-user-md"></i>
+                            <div>
+                                <strong>Doctor ID</strong>
+                                <p>#@Model.DoctorId</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actions Card -->
+                @if (Context.Session.GetString("Role") == "Admin" || Context.Session.GetString("Role") == "Doctor")
+                {
+                    <div class="stat-card mt-4">
+                        <div class="stat-card-header" style="background: #f8f9fa; padding: 1rem;">
+                            <h4 style="margin: 0; color: #1A7FA0;">
+                                <i class="fas fa-cog"></i>
+                                Actions
+                            </h4>
+                        </div>
+                        <div class="stat-card-body" style="padding: 1.5rem;">
+                            <a asp-action="Edit" asp-route-id="@Model.RecordId" class="btn btn-primary w-100 mb-2">
+                                <i class="fas fa-edit"></i> Edit Record
+                            </a>
+                            @if (Context.Session.GetString("Role") == "Admin")
+                            {
+                                <a asp-action="Delete" asp-route-id="@Model.RecordId" class="btn btn-danger w-100">
+                                    <i class="fas fa-trash"></i> Delete Record
+                                </a>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+ *@
+<style>
+    .detail-row {
+        padding: 1.2rem 0;
+        border-bottom: 1px solid #f0f0f0;
+        display: flex;
+        gap: 2rem;
+    }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+    .detail-label {
+        flex: 0 0 200px;
+        display: flex;
+        align-items: flex-start;
+        gap: 0.8rem;
+        color: #666;
+    }
+
+        .detail-label i {
+            color: #1A7FA0;
+            font-size: 1.2rem;
+            width: 20px;
+            flex-shrink: 0;
+            margin-top: 3px;
+        }
+
+    .detail-value {
+        flex: 1;
+        color: #333;
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+
+    .diagnosis-badge {
+        display: inline-block;
+        background: linear-gradient(135deg, #1A7FA0, #4DB8E8);
+        color: white;
+        padding: 0.5rem 1.2rem;
+        border-radius: 20px;
+        font-weight: 600;
+    }
+
+    .prescription-box {
+        background: #f8f9fa;
+        padding: 1rem;
+        border-radius: 8px;
+        border-left: 4px solid #1A7FA0;
+        white-space: pre-wrap;
+    }
+
+    .quick-info-item {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1.2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+        .quick-info-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .quick-info-item i {
+            color: #1A7FA0;
+            font-size: 1.3rem;
+            width: 25px;
+            flex-shrink: 0;
+        }
+
+        .quick-info-item div {
+            flex: 1;
+        }
+
+        .quick-info-item strong {
+            display: block;
+            color: #666;
+            font-size: 0.85rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .quick-info-item p {
+            margin: 0;
+            color: #333;
+            font-weight: 600;
+        }
+
+    @@media (max-width: 991px) {
+        .detail-row
+
+    {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .detail-label {
+        flex: none;
+    }
+
+    }
+</style>

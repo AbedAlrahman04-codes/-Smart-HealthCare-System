@@ -1,0 +1,176 @@
+﻿@{
+    ViewData["Title"] = "لوحة تحكم المدير";
+}
+
+<link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
+
+<div class="admin-page">
+    <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div>
+                <h1><i class="fas fa-tachometer-alt"></i> لوحة تحكم المدير</h1>
+                <p>نظرة شاملة على نظام الرعاية الصحية الذكي</p>
+            </div>
+            <div class="header-actions">
+                <span class="welcome-text">
+                    مرحباً، @Context.Session.GetString("FullName")
+                </span>
+            </div>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="stats-cards">
+            <div class="stat-card stat-card-doctors">
+                <div class="stat-icon">
+                    <i class="fas fa-user-md"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>@ViewBag.TotalDoctors</h3>
+                    <p>إجمالي الأطباء</p>
+                    <span class="stat-badge">@ViewBag.AvailableDoctors متاح</span>
+                </div>
+            </div>
+
+            <div class="stat-card stat-card-patients">
+                <div class="stat-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>@ViewBag.TotalPatients</h3>
+                    <p>إجمالي المرضى</p>
+                    <span class="stat-badge">مسجلين</span>
+                </div>
+            </div>
+
+            <div class="stat-card stat-card-appointments">
+                <div class="stat-icon">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>@ViewBag.TotalAppointments</h3>
+                    <p>إجمالي المواعيد</p>
+                    <span class="stat-badge">@ViewBag.PendingAppointments معلق</span>
+                </div>
+            </div>
+
+            <div class="stat-card stat-card-conversations">
+                <div class="stat-icon">
+                    <i class="fas fa-comments"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>@ViewBag.TotalConversations</h3>
+                    <p>محادثات AI</p>
+                    <span class="stat-badge">مكتملة</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <h2><i class="fas fa-bolt"></i> إجراءات سريعة</h2>
+            <div class="actions-grid">
+                <a asp-action="AddDoctor" class="action-card">
+                    <i class="fas fa-user-plus"></i>
+                    <span>إضافة طبيب جديد</span>
+                </a>
+                <a asp-action="ManageDoctors" class="action-card">
+                    <i class="fas fa-user-md"></i>
+                    <span>إدارة الأطباء</span>
+                </a>
+                <a asp-action="ManagePatients" class="action-card">
+                    <i class="fas fa-users"></i>
+                    <span>إدارة المرضى</span>
+                </a>
+                <a asp-action="Statistics" class="action-card">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>إحصائيات مفصلة</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Recent Data -->
+        <div class="recent-data">
+            <!-- Recent Doctors -->
+            <div class="data-section">
+                <div class="section-header">
+                    <h3><i class="fas fa-user-md"></i> أحدث الأطباء</h3>
+                    <a asp-action="ManageDoctors" class="view-all">عرض الكل <i class="fas fa-arrow-left"></i></a>
+                </div>
+                <div class="data-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>الاسم</th>
+                                <th>التخصص</th>
+                                <th>رقم الترخيص</th>
+                                <th>الحالة</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var doctor in ViewBag.RecentDoctors)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="user-info">
+                                            <div class="user-avatar">@doctor.User.FullName.Substring(0, 1)</div>
+                                            <span style="color:black ;">@doctor.User.FullName</span>
+                                        </div>
+                                    </td>
+                                    <td>@doctor.Specialization</td>
+                                    <td>@doctor.LicenseNumber</td>
+                                    <td>
+                                        @if (doctor.IsAvailable)
+                                        {
+                                            <span class="badge badge-success">متاح</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge badge-secondary">غير متاح</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Recent Patients -->
+            <div class="data-section">
+                <div class="section-header">
+                    <h3><i class="fas fa-users"></i> أحدث المرضى</h3>
+                    <a asp-action="ManagePatients" class="view-all">عرض الكل <i class="fas fa-arrow-left"></i></a>
+                </div>
+                <div class="data-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>الاسم</th>
+                                <th>الجنس</th>
+                                <th>فصيلة الدم</th>
+                                <th>رقم الهاتف</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var patient in ViewBag.RecentPatients)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="user-info">
+                                            <div class="user-avatar">@patient.User.FullName.Substring(0, 1)</div>
+                                            <span>@patient.User.FullName</span>
+                                        </div>
+                                    </td>
+                                    <td>@(patient.Gender == "Male" ? "ذكر" : "أنثى")</td>
+                                    <td><span class="blood-type">@patient.BloodType</span></td>
+                                    <td>@patient.User.Phone</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

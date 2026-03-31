@@ -1,0 +1,582 @@
+﻿/* ═══════════════════════════════════════════════════════════
+   🏥 Patient Dashboard - Sky Blue & Cyan Theme
+   ═══════════════════════════════════════════════════════════ */
+
+:root {
+    --patient-primary: #0EA5E9;
+    --patient-secondary: #06B6D4;
+    --patient-gradient: linear-gradient(135deg, #0EA5E9 0%, #06B6D4 100%);
+    --patient-light: #E0F2FE;
+    --patient-dark: #0369A1;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Page Layout
+   ═══════════════════════════════════════════════════════════ */
+
+.patient-page {
+    background: linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 100%);
+    min-height: 100vh;
+    padding: 2rem 0;
+}
+
+.patient-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Page Header
+   ═══════════════════════════════════════════════════════════ */
+
+.page-header {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 12px rgba(14, 165, 233, 0.1);
+    border: 2px solid #BAE6FD;
+}
+
+.page-header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.page-title-section {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.page-icon {
+    width: 70px;
+    height: 70px;
+    background: var(--patient-gradient);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 2rem;
+    box-shadow: 0 6px 20px rgba(14, 165, 233, 0.3);
+}
+
+.page-title-text h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    background: var(--patient-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 0 0 0.5rem 0;
+}
+
+.page-title-text p {
+    color: #64748B;
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+.page-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Statistics Cards
+   ═══════════════════════════════════════════════════════════ */
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(14, 165, 233, 0.1);
+    border: 2px solid #BAE6FD;
+    transition: all 0.3s ease;
+}
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 24px rgba(14, 165, 233, 0.2);
+        border-color: var(--patient-primary);
+    }
+
+.stat-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.stat-icon {
+    width: 60px;
+    height: 60px;
+    background: var(--patient-gradient);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.8rem;
+    box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+}
+
+.stat-trend {
+    font-size: 0.9rem;
+    color: #10B981;
+    font-weight: 600;
+}
+
+.stat-card-body h3 {
+    font-size: 2.8rem;
+    font-weight: 800;
+    color: #0F172A;
+    margin: 0 0 0.5rem 0;
+}
+
+.stat-card-body p {
+    color: #64748B;
+    font-size: 1rem;
+    margin: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Next Appointment Card
+   ═══════════════════════════════════════════════════════════ */
+
+.next-appointment-card {
+    background: linear-gradient(135deg, #0EA5E9 0%, #06B6D4 100%);
+    border-radius: 20px;
+    padding: 2.5rem;
+    color: white;
+    margin-bottom: 2rem;
+    box-shadow: 0 8px 24px rgba(14, 165, 233, 0.3);
+}
+
+.next-appointment-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.next-appointment-icon {
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+}
+
+.next-appointment-header h3 {
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin: 0;
+}
+
+.appointment-details {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 2rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2rem;
+}
+
+.appointment-detail-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.appointment-detail-icon {
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.appointment-detail-text h4 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem 0;
+    opacity: 0.9;
+}
+
+.appointment-detail-text p {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Recent Appointments Table
+   ═══════════════════════════════════════════════════════════ */
+
+.appointments-section {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(14, 165, 233, 0.1);
+    border: 2px solid #BAE6FD;
+    margin-bottom: 2rem;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #E0F2FE;
+}
+
+    .section-header h3 {
+        font-size: 1.6rem;
+        font-weight: 800;
+        color: #0F172A;
+        margin: 0;
+    }
+
+.appointments-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 1rem;
+}
+
+    .appointments-table thead th {
+        background: linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 100%);
+        padding: 1rem;
+        text-align: right;
+        font-weight: 700;
+        color: var(--patient-dark);
+        border: none;
+    }
+
+        .appointments-table thead th:first-child {
+            border-radius: 12px 0 0 12px;
+        }
+
+        .appointments-table thead th:last-child {
+            border-radius: 0 12px 12px 0;
+        }
+
+    .appointments-table tbody tr {
+        background: #F8FAFC;
+        transition: all 0.3s ease;
+    }
+
+        .appointments-table tbody tr:hover {
+            background: linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 100%);
+            transform: scale(1.02);
+        }
+
+    .appointments-table tbody td {
+        padding: 1.5rem 1rem;
+        border: none;
+    }
+
+    .appointments-table tbody tr td:first-child {
+        border-radius: 12px 0 0 12px;
+    }
+
+    .appointments-table tbody tr td:last-child {
+        border-radius: 0 12px 12px 0;
+    }
+
+.status-badge {
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    display: inline-block;
+}
+
+.status-scheduled {
+    background: linear-gradient(135deg, #DBEAFE 0%, #BFDBFE 100%);
+    color: #1E40AF;
+}
+
+.status-completed {
+    background: linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 100%);
+    color: #065F46;
+}
+
+.status-cancelled {
+    background: linear-gradient(135deg, #FEE2E2 0%, #FECACA 100%);
+    color: #991B1B;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Book Appointment Form
+   ═══════════════════════════════════════════════════════════ */
+
+.book-form-card {
+    background: white;
+    border-radius: 20px;
+    padding: 2.5rem;
+    box-shadow: 0 4px 12px rgba(14, 165, 233, 0.1);
+    border: 2px solid #BAE6FD;
+}
+
+.form-group {
+    margin-bottom: 2rem;
+}
+
+.form-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 700;
+    color: #0F172A;
+    margin-bottom: 0.75rem;
+    font-size: 1.1rem;
+}
+
+    .form-label i {
+        color: var(--patient-primary);
+        font-size: 1.2rem;
+    }
+
+.form-control, .form-select {
+    width: 100%;
+    padding: 1rem 1.5rem;
+    border: 2px solid #E2E8F0;
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+    .form-control:focus, .form-select:focus {
+        outline: none;
+        border-color: var(--patient-primary);
+        box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.1);
+    }
+
+/* ═══════════════════════════════════════════════════════════
+   Buttons
+   ═══════════════════════════════════════════════════════════ */
+
+.btn {
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    border: none;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+}
+
+.btn-primary {
+    background: var(--patient-gradient);
+    color: white;
+    box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+}
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(14, 165, 233, 0.4);
+    }
+
+.btn-secondary {
+    background: linear-gradient(135deg, #F1F5F9 0%, #E2E8F0 100%);
+    color: #475569;
+}
+
+    .btn-secondary:hover {
+        background: linear-gradient(135deg, #E2E8F0 0%, #CBD5E1 100%);
+    }
+
+.btn-success {
+    background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+    color: white;
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+    color: white;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Profile Card
+   ═══════════════════════════════════════════════════════════ */
+
+.profile-card {
+    background: white;
+    border-radius: 20px;
+    padding: 2.5rem;
+    box-shadow: 0 4px 12px rgba(14, 165, 233, 0.1);
+    border: 2px solid #BAE6FD;
+    margin-bottom: 2rem;
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 2px solid #E0F2FE;
+}
+
+.profile-avatar {
+    width: 120px;
+    height: 120px;
+    background: var(--patient-gradient);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    color: white;
+    font-weight: 800;
+    box-shadow: 0 8px 24px rgba(14, 165, 233, 0.3);
+}
+
+.profile-info h2 {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #0F172A;
+    margin: 0 0 0.5rem 0;
+}
+
+.profile-role {
+    color: var(--patient-primary);
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.profile-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+
+.profile-field {
+    background: #F8FAFC;
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 2px solid #E2E8F0;
+}
+
+.profile-field-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #64748B;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.profile-field-value {
+    color: #0F172A;
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Responsive Design
+   ═══════════════════════════════════════════════════════════ */
+
+@media (max-width: 1024px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .appointment-details {
+        grid-template-columns: 1fr;
+    }
+
+    .profile-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .page-header-content {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .page-actions {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .appointments-table {
+        display: block;
+        overflow-x: auto;
+    }
+
+    .profile-header {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Empty State
+   ═══════════════════════════════════════════════════════════ */
+
+.empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+}
+
+.empty-state-icon {
+    width: 120px;
+    height: 120px;
+    background: linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 2rem;
+    font-size: 4rem;
+    color: var(--patient-primary);
+}
+
+.empty-state h3 {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #0F172A;
+    margin: 0 0 1rem 0;
+}
+
+.empty-state p {
+    color: #64748B;
+    font-size: 1.1rem;
+    margin: 0 0 2rem 0;
+}

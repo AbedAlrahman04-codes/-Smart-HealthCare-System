@@ -1,0 +1,200 @@
+﻿@model IEnumerable<SmartHealthcareSystem.Models.Appointment>
+@{
+    ViewData["Title"] = "المواعيد";
+}
+
+<link rel="stylesheet" href="~/css/doctor.css" asp-append-version="true" />
+
+<div class="doctor-dashboard">
+    <div class="container">
+        <!-- Page Header -->
+        <div class="page-header-fancy">
+            <div class="header-content-fancy">
+                <div class="icon-circle">
+                    <i class="fas fa-calendar-alt"></i>
+                </div>
+                <div>
+                    <h1>إدارة المواعيد</h1>
+                    <p>عرض وإدارة جميع المواعيد</p>
+                </div>
+            </div>
+            <a asp-action="Dashboard" class="btn-back">
+                <i class="fas fa-arrow-right"></i>
+                العودة
+            </a>
+        </div>
+
+        <!-- Filter Tabs -->
+        <div class="filter-tabs">
+            <button class="filter-tab active" onclick="filterAppointments('all')">
+                <i class="fas fa-list"></i>
+                الكل (@Model.Count())
+            </button>
+            <button class="filter-tab" onclick="filterAppointments('pending')">
+                <i class="fas fa-clock"></i>
+                قيد الانتظار (@Model.Count(a => a.Status == "Pending"))
+            </button>
+            <button class="filter-tab" onclick="filterAppointments('completed')">
+                <i class="fas fa-check-circle"></i>
+                مكتملة (@Model.Count(a => a.Status == "Completed"))
+            </button>
+            <button class="filter-tab" onclick="filterAppointments('cancelled')">
+                <i class="fas fa-times-circle"></i>
+                ملغاة (@Model.Count(a => a.Status == "Cancelled"))
+            </button>
+        </div>
+
+        <!-- Appointments Timeline -->
+        <div class="appointments-timeline" id="appointmentsTimeline">
+            @if (Model.Any())
+            {
+                var groupedAppointments = Model.GroupBy(a => a.AppointmentDate.Date).OrderByDescending(g => g.Key);
+
+                @foreach (var group in groupedAppointments)
+                {
+                    <div class="timeline-date-group">
+                        <div class="date-header">
+                            <i class="fas fa-calendar"></i>
+                            <h3>@group.Key.ToString("dddd، dd MMMM yyyy", new System.Globalization.CultureInfo("ar-SA"))</h3>
+                            <span class="appointments-count">@group.Count() موعد</span>
+                        </div>
+
+                        <div class="timeline-items">
+                            @foreach (var appointment in group.OrderBy(a => a.AppointmentDate))
+                            {
+                                <div class="appointment-timeline-card" data-status="@appointment.Status.ToLower()">
+                                    <div class="timeline-line"></div>
+                                    <div class="timeline-dot status-@appointment.Status.ToLower()"></div>
+
+                                    <div class="appointment-content">
+                                        <div class="appointment-time-badge">
+                                            <i class="fas fa-clock"></i>
+                                            @appointment.AppointmentDate.ToString("hh:mm tt")
+                                        </div>
+
+                                        <div class="appointment-main">
+                                            <div class="patient-section">
+                                                <div class="patient-avatar-small">
+                                                    @(appointment.Patient?.User?.FullName?.Substring(0, 1) ?? "م")
+                                                </div>
+                                                <div class="patient-details-inline">
+                                                    <h4>@(appointment.Patient?.User?.FullName ?? "مريض")</h4>
+                                                    <p>
+                                                        <i class="fas fa-phone"></i>
+                                                        @(appointment.Patient?.User?.Phone ?? "غير محدد")
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                            <div class="appointment-actions">
+                                                @if (appointment.Status == "Pending")
+                                                {
+                                                    <button class="btn-status btn-complete" onclick="updateStatus(@appointment.AppointmentId, 'Completed')">
+                                                        <i class="fas fa-check"></i>
+                                                        إنجاز
+                                                    </button>
+                                                    <button class="btn-status btn-cancel" onclick="updateStatus(@appointment.AppointmentId, 'Cancelled')">
+                                                        <i class="fas fa-times"></i>
+                                                        إلغاء
+                                                    </button>
+                                                }
+                                                else
+                                                {
+                                                    <div class="status-badge status-@appointment.Status.ToLower()">
+                                                        <i class="fas fa-@(appointment.Status == "Completed" ? "check-circle" : "times-circle")"></i>
+                                                        @(appointment.Status == "Completed" ? "مكتمل" : "ملغي")
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="empty-state-fancy">
+                    <i class="fas fa-calendar-times"></i>
+                    <h3>لا توجد مواعيد</h3>
+                    <p>لم تستقبل أي مواعيد بعد</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function filterAppointments(status) {
+            const cards = document.querySelectorAll('.appointment-timeline-card');
+            const tabs = document.querySelectorAll('.filter-tab');
+
+            // Update active tab
+            tabs.forEach(tab => tab.classList.remove('active'));
+            event.target.closest('.filter-tab').classList.add('active');
+
+            // Filter cards
+            cards.forEach(card => {
+                const cardStatus = card.getAttribute('data-status');
+
+                if (status === 'all' || cardStatus === status) {
+                    card.style.display = '';
+                    card.style.animation = 'slideInRight 0.3s ease';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            // Hide empty date groups
+            document.querySelectorAll('.timeline-date-group').forEach(group => {
+                const visibleCards = group.querySelectorAll('.appointment-timeline-card[style=""]');
+                group.style.display = visibleCards.length > 0 ? '' : 'none';
+            });
+        }
+
+        async function updateStatus(appointmentId, status) {
+            const confirmMessage = status === 'Completed'
+                ? 'هل أنت متأكد من إنجاز هذا الموعد؟'
+                : 'هل أنت متأكد من إلغاء هذا الموعد؟';
+
+            if (!confirm(confirmMessage)) return;
+
+            try {
+                const response = await fetch('/Doctor/UpdateAppointmentStatus', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ appointmentId, status })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showNotification(data.message, 'success');
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    showNotification(data.message, 'error');
+                }
+            } catch (error) {
+                showNotification('حدث خطأ في الاتصال', 'error');
+            }
+        }
+
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type} show`;
+            notification.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+                <span>${message}</span>
+            `;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+    </script>
+}

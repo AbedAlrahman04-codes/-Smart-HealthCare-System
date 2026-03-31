@@ -1,0 +1,245 @@
+﻿@model SmartHealthcareSystem.Models.Doctor
+@{
+    ViewData["Title"] = "الملف الشخصي";
+}
+
+<link rel="stylesheet" href="~/css/doctor.css" asp-append-version="true" />
+
+<div class="doctor-dashboard">
+    <div class="container">
+        <!-- Page Header -->
+        <div class="page-header-fancy">
+            <div class="header-content-fancy">
+                <div class="icon-circle">
+                    <i class="fas fa-user-md"></i>
+                </div>
+                <div>
+                    <h1>الملف الشخصي</h1>
+                    <p>عرض وتعديل معلوماتك الشخصية والمهنية</p>
+                </div>
+            </div>
+            <a asp-action="Dashboard" class="btn-back">
+                <i class="fas fa-arrow-right"></i>
+                العودة
+            </a>
+        </div>
+
+        <div class="profile-grid">
+            <!-- Profile Card -->
+            <div class="profile-card-main">
+                <div class="profile-header">
+                    <div class="profile-avatar-large">
+                        @(Model.User?.FullName?.Substring(0, 1) ?? "د")
+                        <div class="avatar-edit-btn">
+                            <i class="fas fa-camera"></i>
+                        </div>
+                    </div>
+                    <h2>@(Model.User?.FullName ?? "الطبيب")</h2>
+                    <p class="specialization-tag">@Model.Specialization</p>
+                    <div class="profile-badges">
+                        <span class="badge-verified">
+                            <i class="fas fa-check-circle"></i>
+                            موثق
+                        </span>
+                        <span class="badge-license">
+                            <i class="fas fa-id-card"></i>
+                            @Model.LicenseNumber
+                        </span>
+                    </div>
+                </div>
+
+                <div class="profile-stats-mini">
+                    <div class="stat-mini">
+                        <i class="fas fa-calendar-check"></i>
+                        <div>
+                            <h4>عضو منذ</h4>
+                            <p>@Model.User?.CreatedAt.ToString("MMMM yyyy", new System.Globalization.CultureInfo("ar-SA"))</p>
+                        </div>
+                    </div>
+                    <div class="stat-mini">
+                        <i class="fas fa-toggle-@(Model.IsAvailable ? "on" : "off")"></i>
+                        <div>
+                            <h4>الحالة</h4>
+                            <p class="@(Model.IsAvailable ? "text-success" : "text-muted")">
+                                @(Model.IsAvailable ? "متاح" : "غير متاح")
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Personal Information -->
+            <div class="info-card">
+                <div class="card-header-fancy">
+                    <i class="fas fa-user"></i>
+                    <h3>المعلومات الشخصية</h3>
+                </div>
+                <div class="info-grid">
+                    <div class="info-row">
+                        <span class="info-label">
+                            <i class="fas fa-signature"></i>
+                            الاسم الكامل
+                        </span>
+                        <span class="info-value">@(Model.User?.FullName ?? "غير محدد")</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">
+                            <i class="fas fa-envelope"></i>
+                            البريد الإلكتروني
+                        </span>
+                        <span class="info-value">@(Model.User?.Email ?? "غير محدد")</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">
+                            <i class="fas fa-phone"></i>
+                            رقم الهاتف
+                        </span>
+                        <span class="info-value">@(Model.User?.Phone ?? "غير محدد")</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">
+                            <i class="fas fa-user-tag"></i>
+                            اسم المستخدم
+                        </span>
+                        <span class="info-value">@(Model.User?.Username ?? "غير محدد")</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Professional Information -->
+            <div class="info-card">
+                <div class="card-header-fancy">
+                    <i class="fas fa-stethoscope"></i>
+                    <h3>المعلومات المهنية</h3>
+                </div>
+                <div class="info-grid">
+                    <div class="info-row">
+                        <span class="info-label">
+                            <i class="fas fa-hospital"></i>
+                            التخصص
+                        </span>
+                        <span class="info-value">@Model.Specialization</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">
+                            <i class="fas fa-id-card"></i>
+                            رقم الترخيص
+                        </span>
+                        <span class="info-value">@Model.LicenseNumber</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">
+                            <i class="fas fa-money-bill-wave"></i>
+                            رسوم الاستشارة
+                        </span>
+                        <span class="info-value highlight">@Model.ConsultationFee.ToString("F2") JOD</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">
+                            <i class="fas fa-clock"></i>
+                            ساعات العمل
+                        </span>
+                        <span class="info-value">@Model.WorkingHours</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Account Security -->
+            <div class="info-card">
+                <div class="card-header-fancy">
+                    <i class="fas fa-shield-alt"></i>
+                    <h3>الأمان والخصوصية</h3>
+                </div>
+                <div class="security-actions">
+                    <button class="security-btn">
+                        <i class="fas fa-key"></i>
+                        <div>
+                            <h4>تغيير كلمة المرور</h4>
+                            <p>آخر تغيير: @Model.User?.CreatedAt.ToString("dd/MM/yyyy")</p>
+                        </div>
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="security-btn">
+                        <i class="fas fa-mobile-alt"></i>
+                        <div>
+                            <h4>التحقق بخطوتين</h4>
+                            <p>حماية إضافية لحسابك</p>
+                        </div>
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="security-btn">
+                        <i class="fas fa-history"></i>
+                        <div>
+                            <h4>سجل النشاطات</h4>
+                            <p>عرض آخر تسجيلات الدخول</p>
+                        </div>
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="info-card">
+                <div class="card-header-fancy">
+                    <i class="fas fa-bolt"></i>
+                    <h3>إجراءات سريعة</h3>
+                </div>
+                <div class="quick-actions-grid">
+                    <button class="quick-action-btn btn-primary-action">
+                        <i class="fas fa-edit"></i>
+                        <span>تعديل الملف</span>
+                    </button>
+                    <button class="quick-action-btn btn-secondary-action" onclick="toggleAvailabilityFromProfile()">
+                        <i class="fas fa-toggle-on"></i>
+                        <span>تغيير الحالة</span>
+                    </button>
+                    <button class="quick-action-btn btn-info-action">
+                        <i class="fas fa-print"></i>
+                        <span>طباعة الملف</span>
+                    </button>
+                    <button class="quick-action-btn btn-success-action">
+                        <i class="fas fa-download"></i>
+                        <span>تصدير البيانات</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        async function toggleAvailabilityFromProfile() {
+            try {
+                const response = await fetch('/Doctor/ToggleAvailability', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showNotification(data.message, 'success');
+                    setTimeout(() => location.reload(), 1000);
+                }
+            } catch (error) {
+                showNotification('حدث خطأ في الاتصال', 'error');
+            }
+        }
+
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type} show`;
+            notification.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+                <span>${message}</span>
+            `;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+    </script>
+}

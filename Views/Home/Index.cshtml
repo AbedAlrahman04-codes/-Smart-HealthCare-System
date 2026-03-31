@@ -1,0 +1,386 @@
+﻿@{
+    ViewData["Title"] = "الصفحة الرئيسية";
+    Layout = "_Layout";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/home.css" />
+}
+
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="hero-background">
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+        </div>
+    </div>
+
+    <div class="hero-content">
+        <div class="hero-text">
+            <div class="hero-badge">
+                <i class="fas fa-sparkles"></i>
+                <span>نظام صحي ذكي بتقنية AI</span>
+            </div>
+
+            <h1 class="hero-title">
+                نظام الرعاية <span class="highlight">الصحية الذكية</span>
+            </h1>
+
+            <p class="hero-description">
+                نظام متكامل يجمع بين الذكاء الاصطناعي والإدارة الطبية الحديثة لتوفير رعاية صحية فورية، دقيقة، ومتاحة للجميع على مدار الساعة
+            </p>
+
+            <div class="hero-buttons">
+                <a href="/AIAssistant" class="btn-hero btn-primary-hero">
+                    <i class="fas fa-robot"></i>
+                    <span>جرب المساعد الذكي</span>
+                </a>
+                <a href="/Account/Register" class="btn-hero btn-secondary-hero">
+                    <i class="fas fa-user-plus"></i>
+                    <span>سجل الآن مجاناً</span>
+                </a>
+            </div>
+
+            <div class="hero-stats">
+           @*      <div class="stat-item">
+                    <div class="stat-number" data-target="24">0</div>
+                    <div class="stat-label">ساعة متاح</div>
+                </div> *@
+                <div class="stat-item">
+                    <div class="stat-number" data-target="24">0</div>
+                    <div class="stat-label">ساعة متاح</div>
+                </div>
+           @*      <div class="stat-item">
+                    <div class="stat-number" data-target="29">0</div>
+                    <div class="stat-label">مرض في قاعدة البيانات</div>
+                </div> *@
+            </div>
+        </div>
+
+        <div class="hero-visual">
+            <div class="hero-card">
+                <div class="hero-card-content">
+                    <div class="feature-showcase">
+                        <div class="showcase-item">
+                            <div class="showcase-icon">
+                                <i class="fas fa-heartbeat"></i>
+                            </div>
+                            <div class="showcase-title">تشخيص فوري</div>
+                            <div class="showcase-text">تحليل الأعراض بالذكاء الاصطناعي</div>
+                        </div>
+                        <div class="showcase-item">
+                            <div class="showcase-icon">
+                                <i class="fas fa-pills"></i>
+                            </div>
+                            <div class="showcase-title">وصفات ذكية</div>
+                            <div class="showcase-text">أدوية موصى بها بدقة عالية</div>
+                        </div>
+                        <div class="showcase-item">
+                            <div class="showcase-icon">
+                                <i class="fas fa-calendar-check"></i>
+                            </div>
+                            <div class="showcase-title">حجز مواعيد</div>
+                            <div class="showcase-text">إدارة سهلة لمواعيدك الطبية</div>
+                        </div>
+                        <div class="showcase-item">
+                            <div class="showcase-icon">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <div class="showcase-title">أمان تام</div>
+                            <div class="showcase-text">حماية كاملة لبياناتك الطبية</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features-section">
+    <div class="container">
+        <div class="section-header">
+            <div class="section-badge">
+                <i class="fas fa-star"></i>
+                <span>مميزاتنا</span>
+            </div>
+            <h2 class="section-title">لماذا نظامنا الأفضل؟</h2>
+            <p class="section-description">
+                نقدم لك تجربة طبية متكاملة تجمع بين التكنولوجيا الحديثة والرعاية الإنسانية
+            </p>
+        </div>
+
+        <div class="features-grid">
+            <!-- Feature 1 -->
+            <div class="feature-card">
+                <div class="feature-icon-wrapper">
+                    <i class="fas fa-robot feature-icon"></i>
+                </div>
+                <h3 class="feature-title">🤖 مساعد طبي ذكي</h3>
+                <p class="feature-description">
+                    تقنية ذكاء اصطناعي متقدمة لتحليل الأعراض وتقديم التشخيص المبدئي على مدار الساعة
+                </p>
+                <ul class="feature-list">
+                    <li><i class="fas fa-check-circle"></i> تحليل دقيق للأعراض بالعربية</li>
+                    <li><i class="fas fa-check-circle"></i> اقتراح أدوية مناسبة وبدائلها</li>
+                    <li><i class="fas fa-check-circle"></i> نصائح طبية فورية ومجانية</li>
+                    <li><i class="fas fa-check-circle"></i> متاح 24/7 بدون انتظار</li>
+                </ul>
+            </div>
+
+            <!-- Feature 2 -->
+            <div class="feature-card">
+                <div class="feature-icon-wrapper">
+                    <i class="fas fa-user-md feature-icon"></i>
+                </div>
+                <h3 class="feature-title">👨‍⚕️ لوحة تحكم للأطباء</h3>
+                <p class="feature-description">
+                    نظام إدارة شامل يساعد الأطباء على متابعة المرضى وإدارة المواعيد بكفاءة عالية
+                </p>
+                <ul class="feature-list">
+                    <li><i class="fas fa-check-circle"></i> إدارة كاملة للمرضى والملفات</li>
+                    <li><i class="fas fa-check-circle"></i> جدولة المواعيد التلقائية</li>
+                    <li><i class="fas fa-check-circle"></i> إحصائيات وتقارير تفصيلية</li>
+                    <li><i class="fas fa-check-circle"></i> واجهة سهلة وعصرية</li>
+                </ul>
+            </div>
+
+            <!-- Feature 3 -->
+            <div class="feature-card">
+                <div class="feature-icon-wrapper">
+                    <i class="fas fa-users feature-icon"></i>
+                </div>
+                <h3 class="feature-title">👤 بوابة المرضى</h3>
+                <p class="feature-description">
+                    منصة متكاملة للمرضى للوصول لسجلاتهم الطبية وحجز المواعيد بسهولة
+                </p>
+                <ul class="feature-list">
+                    <li><i class="fas fa-check-circle"></i> حجز مواعيد بضغطة زر</li>
+                    <li><i class="fas fa-check-circle"></i> الوصول للسجل الطبي الكامل</li>
+                    <li><i class="fas fa-check-circle"></i> تذكير بالمواعيد والأدوية</li>
+                    <li><i class="fas fa-check-circle"></i> تواصل مباشر مع الطبيب</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="stats-section">
+    <div class="container">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon-circle">
+                    <i class="fas fa-user-md"></i>
+                </div>
+                <div class="stat-number" data-target="50">0</div>
+                <div class="stat-label">طبيب متخصص</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon-circle">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-number" data-target="1000">0</div>
+                <div class="stat-label">مريض راضٍ</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon-circle">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+                <div class="stat-number" data-target="5000">0</div>
+                <div class="stat-label">موعد ناجح</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon-circle">
+                    <i class="fas fa-comments"></i>
+                </div>
+                <div class="stat-number" data-target="10000">0</div>
+                <div class="stat-label">استشارة ذكية</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="how-it-works-section">
+    <div class="container">
+        <div class="section-header">
+            <div class="section-badge">
+                <i class="fas fa-lightbulb"></i>
+                <span>كيف يعمل</span>
+            </div>
+            <h2 class="section-title">ابدأ رحلتك الصحية في 3 خطوات</h2>
+            <p class="section-description">
+                نظام بسيط وسهل يوصلك للرعاية الصحية في دقائق
+            </p>
+        </div>
+
+        <div class="steps-container">
+            <div class="steps-timeline"></div>
+
+            <!-- Step 1 -->
+            <div class="step-item">
+                <div class="step-content">
+                    <h3 class="step-title">1. سجل حسابك مجاناً</h3>
+                    <p class="step-description">
+                        إنشاء حساب سريع وآمن يأخذ أقل من دقيقة. املأ بياناتك الأساسية وابدأ فوراً
+                    </p>
+                    <div class="step-features">
+                        <div class="step-feature">
+                            <i class="fas fa-check"></i>
+                            <span>تسجيل سريع في 60 ثانية</span>
+                        </div>
+                        <div class="step-feature">
+                            <i class="fas fa-check"></i>
+                            <span>حماية كاملة للبيانات</span>
+                        </div>
+                        <div class="step-feature">
+                            <i class="fas fa-check"></i>
+                            <span>تفعيل فوري للحساب</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="step-number-badge">1</div>
+                <div class="step-visual">
+                    <div class="visual-placeholder">
+                        <i class="fas fa-user-plus"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="step-item">
+                <div class="step-content">
+                    <h3 class="step-title">2. استشر المساعد الذكي</h3>
+                    <p class="step-description">
+                        اكتب أعراضك بالعربية واحصل على تشخيص مبدئي فوري مع توصيات دوائية دقيقة
+                    </p>
+                    <div class="step-features">
+                        <div class="step-feature">
+                            <i class="fas fa-check"></i>
+                            <span>تحليل ذكي بتقنية AI</span>
+                        </div>
+                        <div class="step-feature">
+                            <i class="fas fa-check"></i>
+                            <span>نتائج فورية ودقيقة</span>
+                        </div>
+                        <div class="step-feature">
+                            <i class="fas fa-check"></i>
+                            <span>توصيات دوائية مفصلة</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="step-number-badge">2</div>
+                <div class="step-visual">
+                    <div class="visual-placeholder">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="step-item">
+                <div class="step-content">
+                    <h3 class="step-title">3. احجز موعدك مع الطبيب</h3>
+                    <p class="step-description">
+                        إذا احتجت استشارة متخصصة، احجز موعدك بسهولة مع أفضل الأطباء في تخصصات متنوعة
+                    </p>
+                    <div class="step-features">
+                        <div class="step-feature">
+                            <i class="fas fa-check"></i>
+                            <span>حجز فوري ومباشر</span>
+                        </div>
+                        <div class="step-feature">
+                            <i class="fas fa-check"></i>
+                            <span>اختيار الطبيب والتوقيت</span>
+                        </div>
+                        <div class="step-feature">
+                            <i class="fas fa-check"></i>
+                            <span>تأكيد وتذكير تلقائي</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="step-number-badge">3</div>
+                <div class="step-visual">
+                    <div class="visual-placeholder">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+    <div class="cta-background"></div>
+    <div class="cta-container">
+        <div class="cta-icon">
+            <i class="fas fa-rocket"></i>
+        </div>
+        <h2 class="cta-title">ابدأ رحلتك الصحية الآن!</h2>
+        <p class="cta-description">
+            انضم لآلاف المستخدمين الذين اختاروا الرعاية الصحية الذكية. سجل مجاناً واحصل على استشارة فورية
+        </p>
+        <div class="cta-buttons">
+            <a href="/Account/Register" class="btn-hero btn-primary-hero">
+                <i class="fas fa-user-plus"></i>
+                <span>إنشاء حساب مجاني</span>
+            </a>
+            <a href="/AIAssistant" class="btn-hero btn-secondary-hero">
+                <i class="fas fa-robot"></i>
+                <span>جرب المساعد الآن</span>
+            </a>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        function animateCounter(element) {
+            const target = parseInt(element.getAttribute('data-target'));
+            const duration = 2000;
+            const increment = target / (duration / 16);
+            let current = 0;
+
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    element.textContent = target;
+                    clearInterval(timer);
+                } else {
+                    element.textContent = Math.floor(current);
+                }
+            }, 16);
+        }
+
+        const observerOptions = {
+            threshold: 0.3,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const counters = entry.target.querySelectorAll('[data-target]');
+                    counters.forEach(counter => {
+                        if (!counter.classList.contains('animated')) {
+                            animateCounter(counter);
+                            counter.classList.add('animated');
+                        }
+                    });
+                }
+            });
+        }, observerOptions);
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const statsSection = document.querySelector('.stats-section');
+            const heroStats = document.querySelector('.hero-stats');
+
+            if (statsSection) observer.observe(statsSection);
+            if (heroStats) observer.observe(heroStats);
+        });
+    </script>
+}

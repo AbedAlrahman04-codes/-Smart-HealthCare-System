@@ -1,0 +1,287 @@
+﻿@model IEnumerable<SmartHealthcareSystem.Models.Patient>
+@{
+    ViewData["Title"] = "إدارة المرضى";
+}
+
+<link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
+
+<div class="admin-page">
+    <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div>
+                <h1><i class="fas fa-users"></i> إدارة المرضى</h1>
+                <p>عرض وإدارة جميع المرضى المسجلين في النظام</p>
+            </div>
+            <div class="header-actions">
+                <a asp-action="Dashboard" class="btn-admin btn-secondary-admin">
+                    <i class="fas fa-arrow-right"></i>
+                    العودة إلى لوحة التحكم
+                </a>
+            </div>
+        </div>
+
+        <!-- Statistics Summary -->
+        <div class="stats-summary">
+            <div class="summary-card">
+                <i class="fas fa-users"></i>
+                <div>
+                    <h3>@Model.Count()</h3>
+                    <p>إجمالي المرضى</p>
+                </div>
+            </div>
+            <div class="summary-card">
+                <i class="fas fa-male"></i>
+                <div>
+                    <h3>@Model.Count(p => p.Gender == "Male")</h3>
+                    <p>ذكور</p>
+                </div>
+            </div>
+            <div class="summary-card">
+                <i class="fas fa-female"></i>
+                <div>
+                    <h3>@Model.Count(p => p.Gender == "Female")</h3>
+                    <p>إناث</p>
+                </div>
+            </div>
+            <div class="summary-card">
+                <i class="fas fa-calendar"></i>
+                <div>
+                    <h3>@Model.Count(p => p.User.CreatedAt.Date == DateTime.Today)</h3>
+                    <p>مسجلين اليوم</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search and Filter -->
+        <div class="search-section">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="ابحث عن مريض..." onkeyup="searchTable()">
+            </div>
+            <div class="filter-options">
+                <select id="genderFilter" class="form-control-admin" onchange="filterTable()">
+                    <option value="">الجنس: الكل</option>
+                    <option value="Male">ذكر</option>
+                    <option value="Female">أنثى</option>
+                </select>
+                <select id="bloodTypeFilter" class="form-control-admin" onchange="filterTable()">
+                    <option value="">فصيلة الدم: الكل</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Patients Table -->
+        <div class="data-section">
+            <div class="data-table">
+                <table id="patientsTable">
+                    <thead>
+                        <tr>
+                            <th>المريض</th>
+                            <th>الجنس</th>
+                            <th>تاريخ الميلاد</th>
+                            <th>فصيلة الدم</th>
+                            <th>العنوان</th>
+                            <th>رقم الهاتف</th>
+                            <th>تاريخ التسجيل</th>
+                            <th>الإجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Any())
+                        {
+                            @foreach (var patient in Model)
+                            {
+                                <tr id="patient-@patient.PatientId" data-gender="@patient.Gender" data-bloodtype="@patient.BloodType">
+                                    <td>
+                                        <div class="user-info">
+                                            <div class="user-avatar">
+                                                @(string.IsNullOrEmpty(patient.User?.FullName) ? "م" : patient.User.FullName.Substring(0, 1))
+                                            </div>
+                                            <div>
+                                                <strong>@(patient.User?.FullName ?? "غير محدد")</strong>
+                                                <br>
+                                                <small style="color: #7F8C8D;">@(patient.User?.Email ?? "لا يوجد بريد")</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        @if (patient.Gender == "Male")
+                                        {
+                                            <span class="badge badge-primary">
+                                                <i class="fas fa-mars"></i> ذكر
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge badge-danger" style="background: #FFE5E5; color: #E74C3C;">
+                                                <i class="fas fa-venus"></i> أنثى
+                                            </span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @{
+                                            var dob = patient.DateOfBirth;
+                                            var dobString = dob != default(DateTime) ? dob.ToString("yyyy-MM-dd") : "غير محدد";
+                                            var age = dob != default(DateTime) ? (DateTime.Now.Year - dob.Year).ToString() : "";
+                                        }
+                                        @dobString
+                                        @if (!string.IsNullOrEmpty(age))
+                                        {
+                                            <br />
+                                            <small style="color: #7F8C8D;">(@age سنة)</small>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(patient.BloodType))
+                                        {
+                                            <span class="blood-type">@patient.BloodType</span>
+                                        }
+                                        else
+                                        {
+                                            <span style="color: #BDC3C7;">غير محدد</span>
+                                        }
+                                    </td>
+                                    <td>@(patient.Address ?? "غير محدد")</td>
+                                    <td>@(patient.User?.Phone ?? "غير محدد")</td>
+                                    <td>@patient.User.CreatedAt.ToString("yyyy-MM-dd")</td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="btn-icon btn-icon-danger"
+                                                    onclick="deletePatient(@patient.PatientId, '@(patient.User?.FullName ?? "هذا المريض")')"
+                                                    title="حذف">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="8" style="text-align: center; padding: 3rem; color: #7F8C8D;">
+                                    <i class="fas fa-inbox" style="font-size: 3rem; display: block; margin-bottom: 1rem;"></i>
+                                    لا يوجد مرضى مسجلين في النظام
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .filter-options {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+        .filter-options select {
+            max-width: 200px;
+        }
+</style>
+
+@section Scripts {
+    <script>
+        // Search functionality
+        function searchTable() {
+            const input = document.getElementById('searchInput');
+            const filter = input.value.toUpperCase();
+            const table = document.getElementById('patientsTable');
+            const tr = table.getElementsByTagName('tr');
+
+            for (let i = 1; i < tr.length; i++) {
+                const td = tr[i].getElementsByTagName('td');
+                let found = false;
+
+                for (let j = 0; j < td.length; j++) {
+                    if (td[j]) {
+                        const txtValue = td[j].textContent || td[j].innerText;
+                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+
+                tr[i].style.display = found ? '' : 'none';
+            }
+        }
+
+        // Filter functionality
+        function filterTable() {
+            const genderFilter = document.getElementById('genderFilter').value;
+            const bloodTypeFilter = document.getElementById('bloodTypeFilter').value;
+            const table = document.getElementById('patientsTable');
+            const tr = table.getElementsByTagName('tr');
+
+            for (let i = 1; i < tr.length; i++) {
+                const gender = tr[i].getAttribute('data-gender');
+                const bloodType = tr[i].getAttribute('data-bloodtype');
+
+                let showGender = !genderFilter || gender === genderFilter;
+                let showBloodType = !bloodTypeFilter || bloodType === bloodTypeFilter;
+
+                tr[i].style.display = (showGender && showBloodType) ? '' : 'none';
+            }
+        }
+
+        // Delete patient
+        async function deletePatient(patientId, patientName) {
+            if (!confirm(`هل أنت متأكد من حذف المريض "${patientName}"؟\n\nسيتم حذف جميع البيانات المرتبطة به بما في ذلك:\n- المواعيد\n- محادثات AI`)) {
+                return;
+            }
+
+            // Double confirmation
+            if (!confirm('هذا الإجراء لا يمكن التراجع عنه. هل أنت متأكد تماماً؟')) {
+                return;
+            }
+
+            try {
+                const response = await fetch('@Url.Action("DeletePatient", "Admin")', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ patientId: patientId })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    // Remove row with animation
+                    const row = document.getElementById('patient-' + patientId);
+                    row.style.transition = 'all 0.3s';
+                    row.style.opacity = '0';
+                    row.style.transform = 'translateX(20px)';
+
+                    setTimeout(() => {
+                        row.remove();
+
+                        // Check if table is empty
+                        const tbody = document.querySelector('#patientsTable tbody');
+                        if (tbody.children.length === 0) {
+                            location.reload();
+                        }
+                    }, 300);
+                } else {
+                    alert('حدث خطأ: ' + result.message);
+                }
+            } catch (error) {
+                alert('حدث خطأ في الاتصال');
+            }
+        }
+    </script>
+}

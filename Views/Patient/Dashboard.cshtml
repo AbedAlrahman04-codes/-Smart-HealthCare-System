@@ -1,0 +1,230 @@
+﻿@{
+    ViewData["Title"] = "لوحة التحكم";
+    var patient = ViewBag.Patient as SmartHealthcareSystem.Models.Patient;
+    var nextAppointment = ViewBag.NextAppointment as SmartHealthcareSystem.Models.Appointment;
+    var recentAppointments = ViewBag.RecentAppointments as List<SmartHealthcareSystem.Models.Appointment>;
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/patient.css" />
+}
+
+<div class="patient-page">
+    <div class="patient-container">
+
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="page-header-content">
+                <div class="page-title-section">
+                    <div class="page-icon">
+                        <i class="fas fa-th-large"></i>
+                    </div>
+                    <div class="page-title-text">
+                        <h1>مرحباً، @patient?.User?.FullName</h1>
+                        <p>لوحة التحكم الخاصة بك</p>
+                    </div>
+                </div>
+                <div class="page-actions">
+                    <a href="@Url.Action("BookAppointment", "Patient")" class="btn btn-primary">
+                        <i class="fas fa-plus"></i>
+                        <span>حجز موعد جديد</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-card-header">
+                    <div class="stat-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                </div>
+                <div class="stat-card-body">
+                    <h3>@ViewBag.TotalAppointments</h3>
+                    <p>إجمالي المواعيد</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-card-header">
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                </div>
+                <div class="stat-card-body">
+                    <h3>@ViewBag.UpcomingAppointments</h3>
+                    <p>مواعيد قادمة</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-card-header">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #10B981 0%, #059669 100%);">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                </div>
+                <div class="stat-card-body">
+                    <h3>@ViewBag.CompletedAppointments</h3>
+                    <p>مواعيد مكتملة</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-card-header">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #10B981 0%, #059669 100%);">
+                        <i class="fas fa-file-medical"></i>
+                    </div>
+                </div>
+                <div class="stat-card-body">
+                    <h3>@ViewBag.MedicalRecordsCount</h3>
+                    <p>السجلات الطبية</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ✅ Quick Actions -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <h3 style="margin-bottom: 1.5rem;">
+                    <i class="fas fa-bolt"></i>
+                    إجراءات سريعة
+                </h3>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <a href="@Url.Action("BookAppointment", "Patient")" class="quick-action-card">
+                    <div class="quick-action-icon" style="background: linear-gradient(135deg, #1A7FA0 0%, #4DB8E8 100%);">
+                        <i class="fas fa-calendar-plus"></i>
+                    </div>
+                    <div class="quick-action-content">
+                        <h5>حجز موعد جديد</h5>
+                        <p>احجز موعدك مع الطبيب</p>
+                    </div>
+                    <i class="fas fa-arrow-left quick-action-arrow"></i>
+                </a>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <a href="@Url.Action("MyRecords", "MedicalRecord")" class="quick-action-card">
+                    <div class="quick-action-icon" style="background: linear-gradient(135deg, #10B981 0%, #059669 100%);">
+                        <i class="fas fa-file-medical"></i>
+                    </div>
+                    <div class="quick-action-content">
+                        <h5>سجلاتي الطبية</h5>
+                        <p>اطلع على سجلك الطبي الكامل</p>
+                    </div>
+                    <i class="fas fa-arrow-left quick-action-arrow"></i>
+                </a>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <a href="@Url.Action("Index", "AIAssistant")" class="quick-action-card">
+                    <div class="quick-action-icon" style="background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%);">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="quick-action-content">
+                        <h5>المساعد الذكي</h5>
+                        <p>استشر المساعد الطبي AI</p>
+                    </div>
+                    <i class="fas fa-arrow-left quick-action-arrow"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Next Appointment -->
+        @if (nextAppointment != null)
+        {
+            <div class="next-appointment-card">
+                <div class="next-appointment-header">
+                    <div class="next-appointment-icon">
+                        <i class="fas fa-calendar-day"></i>
+                    </div>
+                    <h3>الموعد القادم</h3>
+                </div>
+                <div class="appointment-details">
+                    <div class="appointment-detail-item">
+                        <div class="appointment-detail-icon">
+                            <i class="fas fa-user-md"></i>
+                        </div>
+                        <div class="appointment-detail-text">
+                            <h4>الطبيب</h4>
+                            <p>د. @nextAppointment.Doctor?.User?.FullName</p>
+                        </div>
+                    </div>
+                    <div class="appointment-detail-item">
+                        <div class="appointment-detail-icon">
+                            <i class="fas fa-calendar"></i>
+                        </div>
+                        <div class="appointment-detail-text">
+                            <h4>التاريخ</h4>
+                            <p>@nextAppointment.AppointmentDate.ToString("yyyy-MM-dd")</p>
+                        </div>
+                    </div>
+                    <div class="appointment-detail-item">
+                        <div class="appointment-detail-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="appointment-detail-text">
+                            <h4>الوقت</h4>
+                            <p>@nextAppointment.AppointmentDate.ToString("hh:mm tt")</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <!-- Recent Appointments (كما هو بدون أي تعديل) -->
+        <!-- نفس كودك القديم هنا كما أرسلته -->
+
+    </div>
+</div>
+
+<style>
+    /* Quick Actions Style */
+    .quick-action-card {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        padding: 1.5rem;
+        background: white;
+        border-radius: 12px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        position: relative;
+        overflow: hidden;
+    }
+
+        .quick-action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+    .quick-action-icon {
+        width: 70px;
+        height: 70px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 2rem;
+        flex-shrink: 0;
+    }
+
+    .quick-action-content {
+        flex: 1;
+    }
+
+    .quick-action-arrow {
+        color: #1A7FA0;
+        font-size: 1.2rem;
+        transition: transform 0.3s ease;
+    }
+
+    .quick-action-card:hover .quick-action-arrow {
+        transform: translateX(-5px);
+    }
+</style>

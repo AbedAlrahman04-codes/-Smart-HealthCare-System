@@ -1,0 +1,317 @@
+﻿@model SmartHealthcareSystem.Models.Appointment
+
+@{
+    ViewData["Title"] = "إعادة جدولة الموعد";
+    var doctors = ViewBag.Doctors as List<SmartHealthcareSystem.Models.Doctor>;
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/appointments.css" />
+}
+
+<div class="appointment-details-page">
+    <div class="appointment-details-container">
+        <!-- Page Header -->
+        <div style="background: white; border-radius: 20px; padding: 2rem; margin-bottom: 2rem; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.1); border: 2px solid #FCD34D;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="display: flex; align-items: center; gap: 1.5rem;">
+                    <div style="width: 70px; height: 70px; background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; box-shadow: 0 6px 20px rgba(245, 158, 11, 0.3);">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <div>
+                        <h1 style="font-size: 2.5rem; font-weight: 800; background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin: 0 0 0.5rem 0;">
+                            إعادة جدولة الموعد
+                        </h1>
+                        <p style="color: #64748B; font-size: 1.1rem; margin: 0;">
+                            قم بتغيير تاريخ ووقت موعدك
+                        </p>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 1rem;">
+                    <a href="@Url.Action("AppointmentDetails", "Patient", new { id = Model.AppointmentId })" class="btn btn-secondary">
+                        <i class="fas fa-arrow-right"></i>
+                        <span>العودة</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Current Appointment Info -->
+        <div style="background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%); border-radius: 20px; padding: 2rem; margin-bottom: 2rem; border: 2px solid #FCD34D; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.15);">
+            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 2px solid rgba(245, 158, 11, 0.2);">
+                <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem;">
+                    <i class="fas fa-info-circle"></i>
+                </div>
+                <h3 style="font-size: 1.5rem; font-weight: 800; color: #92400E; margin: 0;">
+                    معلومات الموعد الحالي
+                </h3>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;">
+                <!-- Doctor -->
+                <div style="background: rgba(255, 255, 255, 0.6); border-radius: 12px; padding: 1.5rem; border: 2px solid rgba(245, 158, 11, 0.2);">
+                    <p style="color: #92400E; font-size: 0.9rem; font-weight: 600; margin: 0 0 0.5rem 0;">
+                        <i class="fas fa-user-md"></i> الطبيب
+                    </p>
+                    <h4 style="color: #78350F; font-size: 1.2rem; font-weight: 800; margin: 0;">
+                        د. @Model.Doctor?.User?.FullName
+                    </h4>
+                    <p style="color: #92400E; font-size: 0.9rem; margin: 0.5rem 0 0 0;">
+                        @Model.Doctor?.Specialization
+                    </p>
+                </div>
+
+                <!-- Date -->
+                <div style="background: rgba(255, 255, 255, 0.6); border-radius: 12px; padding: 1.5rem; border: 2px solid rgba(245, 158, 11, 0.2);">
+                    <p style="color: #92400E; font-size: 0.9rem; font-weight: 600; margin: 0 0 0.5rem 0;">
+                        <i class="fas fa-calendar"></i> التاريخ
+                    </p>
+                    <h4 style="color: #78350F; font-size: 1.2rem; font-weight: 800; margin: 0;">
+                        @Model.AppointmentDate.ToString("yyyy-MM-dd")
+                    </h4>
+                    <p style="color: #92400E; font-size: 0.9rem; margin: 0.5rem 0 0 0;">
+                        @Model.AppointmentDate.ToString("dddd")
+                    </p>
+                </div>
+
+                <!-- Time -->
+                <div style="background: rgba(255, 255, 255, 0.6); border-radius: 12px; padding: 1.5rem; border: 2px solid rgba(245, 158, 11, 0.2);">
+                    <p style="color: #92400E; font-size: 0.9rem; font-weight: 600; margin: 0 0 0.5rem 0;">
+                        <i class="fas fa-clock"></i> الوقت
+                    </p>
+                    <h4 style="color: #78350F; font-size: 1.2rem; font-weight: 800; margin: 0;">
+                        @Model.AppointmentDate.ToString("hh:mm tt")
+                    </h4>
+                    <p style="color: #92400E; font-size: 0.9rem; margin: 0.5rem 0 0 0;">
+                        @Model.AppointmentDate.ToString("HH:mm")
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;">
+            <!-- Reschedule Form -->
+            <div style="background: white; border-radius: 20px; padding: 2.5rem; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1); border: 2px solid #BFDBFE;">
+                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 2px solid #EFF6FF;">
+                    <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.8rem;">
+                        <i class="fas fa-edit"></i>
+                    </div>
+                    <div>
+                        <h3 style="font-size: 1.6rem; font-weight: 800; color: #0F172A; margin: 0;">
+                            معلومات الموعد الجديد
+                        </h3>
+                        <p style="color: #64748B; margin: 0;">
+                            اختر التاريخ والوقت الجديد
+                        </p>
+                    </div>
+                </div>
+
+                <form asp-action="RescheduleAppointment" asp-controller="Patient" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" value="@Model.AppointmentId" />
+
+                    <!-- New Date & Time -->
+                    <div class="form-group">
+                        <label class="form-label" for="appointmentDate">
+                            <i class="fas fa-calendar-alt"></i>
+                            التاريخ والوقت الجديد <span style="color: #EF4444;">*</span>
+                        </label>
+                        <input type="datetime-local"
+                               class="form-control"
+                               id="appointmentDate"
+                               name="appointmentDate"
+                               value="@Model.AppointmentDate.ToString("yyyy-MM-ddTHH:mm")"
+                               min="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")"
+                               required />
+                        <small style="color: #64748B; display: block; margin-top: 0.5rem;">
+                            <i class="fas fa-info-circle"></i>
+                            اختر تاريخاً ووقتاً مستقبلياً
+                        </small>
+                    </div>
+
+                    <!-- Change Doctor (Optional) -->
+                    <div class="form-group">
+                        <label class="form-label" for="doctorId">
+                            <i class="fas fa-user-md"></i>
+                            تغيير الطبيب (اختياري)
+                        </label>
+                        <select class="form-select" id="doctorId" name="doctorId">
+                            <option value="">-- الاحتفاظ بنفس الطبيب --</option>
+                            @if (doctors != null)
+                            {
+                                @foreach (var doctor in doctors)
+                                {
+                                    <option value="@doctor.DoctorId" selected="@(doctor.DoctorId == Model.DoctorId)">
+                                        د. @doctor.User?.FullName - @doctor.Specialization
+                                    </option>
+                                }
+                            }
+                        </select>
+                    </div>
+
+                    <!-- Update Reason (Optional) -->
+                    <div class="form-group">
+                        <label class="form-label" for="reason">
+                            <i class="fas fa-notes-medical"></i>
+                            تحديث سبب الزيارة (اختياري)
+                        </label>
+                        <textarea class="form-control"
+                                  id="reason"
+                                  name="reason"
+                                  rows="4"
+                                  placeholder="اكتب سبب الزيارة المحدث...">@Model.Reason</textarea>
+                    </div>
+
+                    <!-- Warning Message -->
+                    <div style="background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%); border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; border-right: 4px solid #F59E0B;">
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <i class="fas fa-exclamation-triangle" style="color: #F59E0B; font-size: 1.5rem;"></i>
+                            <p style="color: #92400E; margin: 0; font-weight: 600;">
+                                سيتم حفظ التغييرات مباشرة. تأكد من صحة المعلومات قبل الحفظ.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Submit Buttons -->
+                    <div style="display: flex; gap: 1rem;">
+                        <button type="submit" class="btn btn-primary" style="flex: 1;">
+                            <i class="fas fa-check-circle"></i>
+                            <span>حفظ التعديلات</span>
+                        </button>
+                        <a href="@Url.Action("AppointmentDetails", "Patient", new { id = Model.AppointmentId })" class="btn btn-secondary" style="flex: 1;">
+                            <i class="fas fa-times"></i>
+                            <span>إلغاء</span>
+                        </a>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Tips Sidebar -->
+            <div>
+                <!-- Tips Card -->
+                <div style="background: linear-gradient(135deg, #DBEAFE 0%, #BFDBFE 100%); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; border: 2px solid #93C5FD;">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+                        <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem;">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                        <h4 style="font-size: 1.3rem; font-weight: 800; color: #1E40AF; margin: 0;">نصائح</h4>
+                    </div>
+                    <ul style="list-style: none; padding: 0; margin: 0; color: #1E3A8A;">
+                        <li style="padding: 0.75rem 0; display: flex; align-items: start; gap: 0.75rem; border-bottom: 1px solid rgba(59, 130, 246, 0.2);">
+                            <i class="fas fa-check-circle" style="color: #10B981; font-size: 1.2rem; flex-shrink: 0; margin-top: 0.2rem;"></i>
+                            <span>اختر وقتاً مناسباً لك</span>
+                        </li>
+                        <li style="padding: 0.75rem 0; display: flex; align-items: start; gap: 0.75rem; border-bottom: 1px solid rgba(59, 130, 246, 0.2);">
+                            <i class="fas fa-check-circle" style="color: #10B981; font-size: 1.2rem; flex-shrink: 0; margin-top: 0.2rem;"></i>
+                            <span>تأكد من توفر الطبيب</span>
+                        </li>
+                        <li style="padding: 0.75rem 0; display: flex; align-items: start; gap: 0.75rem;">
+                            <i class="fas fa-check-circle" style="color: #10B981; font-size: 1.2rem; flex-shrink: 0; margin-top: 0.2rem;"></i>
+                            <span>احضر قبل الموعد بـ 10 دقائق</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Support Card -->
+                <div style="background: linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 100%); border-radius: 16px; padding: 2rem; border: 2px solid #6EE7B7; text-align: center;">
+                    <i class="fas fa-headset" style="font-size: 2.5rem; color: #10B981; margin-bottom: 1rem;"></i>
+                    <h4 style="font-size: 1.2rem; font-weight: 800; color: #065F46; margin: 0 0 0.5rem 0;">
+                        تحتاج مساعدة؟
+                    </h4>
+                    <p style="color: #047857; margin: 0 0 1rem 0; font-size: 0.95rem;">
+                        فريق الدعم متاح لمساعدتك
+                    </p>
+                    <a href="@Url.Action("Index", "AIAssistant")" class="btn btn-success" style="width: 100%;">
+                        <i class="fas fa-comments"></i>
+                        <span>تحدث معنا</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-group {
+        margin-bottom: 2rem;
+    }
+
+    .form-label {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-weight: 700;
+        color: #0F172A;
+        margin-bottom: 0.75rem;
+        font-size: 1.1rem;
+    }
+
+        .form-label i {
+            color: #3B82F6;
+            font-size: 1.2rem;
+        }
+
+    .form-control, .form-select {
+        width: 100%;
+        padding: 1rem 1.5rem;
+        border: 2px solid #E2E8F0;
+        border-radius: 12px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+
+        .form-control:focus, .form-select:focus {
+            outline: none;
+            border-color: #3B82F6;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+        }
+
+    .btn {
+        padding: 1rem 2rem;
+        border-radius: 12px;
+        border: none;
+        font-weight: 700;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        text-decoration: none;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+        color: white;
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    }
+
+    .btn-secondary {
+        background: linear-gradient(135deg, #F1F5F9 0%, #E2E8F0 100%);
+        color: #475569;
+    }
+
+    .btn-success {
+        background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+        color: white;
+    }
+
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    @@media (max-width: 768px) {
+        .form-group
+
+    {
+        margin-bottom: 1.5rem;
+    }
+
+    }
+</style>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

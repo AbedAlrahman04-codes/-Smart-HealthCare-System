@@ -1,0 +1,546 @@
+﻿@model SmartHealthcareSystem.Models.Appointment
+
+@{
+    ViewData["Title"] = "تفاصيل الموعد";
+    var medicalRecord = ViewBag.MedicalRecord as SmartHealthcareSystem.Models.MedicalRecord;
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/appointments.css" />
+}
+
+<div class="appointment-details-page">
+    <div class="appointment-details-container">
+        <!-- Page Header -->
+        <div style="background: white; border-radius: 20px; padding: 2rem; margin-bottom: 2rem; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1); border: 2px solid #BFDBFE;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="display: flex; align-items: center; gap: 1.5rem;">
+                    <div style="width: 70px; height: 70px; background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3);">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <div>
+                        <h1 style="font-size: 2.5rem; font-weight: 800; background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin: 0 0 0.5rem 0;">
+                            تفاصيل الموعد
+                        </h1>
+                        <p style="color: #64748B; font-size: 1.1rem; margin: 0;">
+                            معلومات كاملة عن موعدك الطبي
+                        </p>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 1rem;">
+                    <a href="@Url.Action("MyAppointments", "Patient")" class="btn btn-secondary">
+                        <i class="fas fa-arrow-right"></i>
+                        <span>العودة</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Status Header -->
+        <div class="appointment-details-card">
+            <div class="appointment-status-header">
+                <div class="appointment-id">
+                    <i class="fas fa-hashtag"></i>
+                    <span>موعد رقم: @Model.AppointmentId</span>
+                </div>
+                <div>
+                    @if (Model.Status == "Scheduled")
+                    {
+                        <span class="status-badge-large status-scheduled">
+                            <i class="fas fa-clock"></i> مجدول
+                        </span>
+                    }
+                    else if (Model.Status == "Completed")
+                    {
+                        <span class="status-badge-large status-completed">
+                            <i class="fas fa-check-circle"></i> مكتمل
+                        </span>
+                    }
+                    else if (Model.Status == "Cancelled")
+                    {
+                        <span class="status-badge-large status-cancelled">
+                            <i class="fas fa-times-circle"></i> ملغي
+                        </span>
+                    }
+                </div>
+            </div>
+
+            <!-- Participants Cards -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+                <!-- Doctor Card -->
+                <div class="participant-card doctor-card">
+                    <div class="participant-avatar">
+                        @if (Model.Doctor?.User?.FullName != null)
+                        {
+                            var nameParts = Model.Doctor.User.FullName.Split(' ');
+                            var initials = nameParts.Length >= 2
+                            ? nameParts[0].Substring(0, 1) + nameParts[1].Substring(0, 1)
+                            : nameParts[0].Substring(0, 1);
+                            <span>@initials</span>
+                        }
+                    </div>
+                    <div class="participant-info">
+                        <p class="participant-label">الطبيب</p>
+                        <h3 class="participant-name">د. @Model.Doctor?.User?.FullName</h3>
+                        <p class="participant-specialty">
+                            <i class="fas fa-stethoscope"></i>
+                            @Model.Doctor?.Specialization
+                        </p>
+                        <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                            @if (Model.Doctor?.User?.Phone != null)
+                            {
+                                <div style="display: flex; align-items: center; gap: 0.5rem; color: #64748B; font-size: 0.9rem;">
+                                    <i class="fas fa-phone" style="color: #3B82F6;"></i>
+                                    <span>@Model.Doctor.User.Phone</span>
+                                </div>
+                            }
+                            @if (Model.Doctor?.User?.Email != null)
+                            {
+                                <div style="display: flex; align-items: center; gap: 0.5rem; color: #64748B; font-size: 0.9rem;">
+                                    <i class="fas fa-envelope" style="color: #3B82F6;"></i>
+                                    <span>@Model.Doctor.User.Email</span>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Patient Card -->
+                <div class="participant-card patient-card">
+                    <div class="participant-avatar" style="background: linear-gradient(135deg, #10B981 0%, #059669 100%);">
+                        @if (Model.Patient?.User?.FullName != null)
+                        {
+                            var nameParts = Model.Patient.User.FullName.Split(' ');
+                            var initials = nameParts.Length >= 2
+                            ? nameParts[0].Substring(0, 1) + nameParts[1].Substring(0, 1)
+                            : nameParts[0].Substring(0, 1);
+                            <span>@initials</span>
+                        }
+                    </div>
+                    <div class="participant-info">
+                        <p class="participant-label">المريض</p>
+                        <h3 class="participant-name">@Model.Patient?.User?.FullName</h3>
+                        <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                            @if (Model.Patient?.User?.Phone != null)
+                            {
+                                <div style="display: flex; align-items: center; gap: 0.5rem; color: #64748B; font-size: 0.9rem;">
+                                    <i class="fas fa-phone" style="color: #10B981;"></i>
+                                    <span>@Model.Patient.User.Phone</span>
+                                </div>
+                            }
+                            @if (Model.Patient?.Gender != null)
+                            {
+                                <div style="display: flex; align-items: center; gap: 0.5rem; color: #64748B; font-size: 0.9rem;">
+                                    <i class="fas fa-venus-mars" style="color: #10B981;"></i>
+                                    <span>@(Model.Patient.Gender == "Male" ? "ذكر" : "أنثى")</span>
+                                </div>
+                            }
+                            @if (Model.Patient?.BloodType != null)
+                            {
+                                <div style="display: flex; align-items: center; gap: 0.5rem; color: #64748B; font-size: 0.9rem;">
+                                    <i class="fas fa-tint" style="color: #10B981;"></i>
+                                    <span>@Model.Patient.BloodType</span>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Appointment Info Grid -->
+            <div class="appointment-info-grid">
+                <!-- Date -->
+                <div class="info-card">
+                    <div class="info-icon" style="background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <div class="info-content">
+                        <p class="info-label">التاريخ</p>
+                        <h4 class="info-value">@Model.AppointmentDate.ToString("yyyy-MM-dd")</h4>
+                        <p class="info-subtext">@Model.AppointmentDate.ToString("dddd")</p>
+                    </div>
+                </div>
+
+                <!-- Time -->
+                <div class="info-card">
+                    <div class="info-icon" style="background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%);">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="info-content">
+                        <p class="info-label">الوقت</p>
+                        <h4 class="info-value">@Model.AppointmentDate.ToString("hh:mm tt")</h4>
+                        <p class="info-subtext">@Model.AppointmentDate.ToString("HH:mm")</p>
+                    </div>
+                </div>
+
+                <!-- Time Remaining -->
+                <div class="info-card">
+                    <div class="info-icon" style="background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);">
+                        <i class="fas fa-hourglass-half"></i>
+                    </div>
+                    <div class="info-content">
+                        <p class="info-label">الوقت المتبقي</p>
+                        @{
+                            var timeRemaining = Model.AppointmentDate - DateTime.Now;
+                            if (timeRemaining.TotalDays > 0)
+                            {
+                                <h4 class="info-value">@((int)timeRemaining.TotalDays) يوم</h4>
+                                <p class="info-subtext">@((int)timeRemaining.Hours) ساعة</p>
+                            }
+                            else if (timeRemaining.TotalHours > 0)
+                            {
+                                <h4 class="info-value">@((int)timeRemaining.TotalHours) ساعة</h4>
+                                <p class="info-subtext">@((int)timeRemaining.Minutes) دقيقة</p>
+                            }
+                            else if (timeRemaining.TotalMinutes > 0)
+                            {
+                                <h4 class="info-value">@((int)timeRemaining.TotalMinutes) دقيقة</h4>
+                                <p class="info-subtext">قريباً</p>
+                            }
+                            else
+                            {
+                                <h4 class="info-value">انتهى</h4>
+                                <p class="info-subtext">الموعد مضى</p>
+                            }
+                        }
+                    </div>
+                </div>
+
+                <!-- Created Date -->
+                <div class="info-card">
+                    <div class="info-icon" style="background: linear-gradient(135deg, #10B981 0%, #059669 100%);">
+                        <i class="fas fa-calendar-plus"></i>
+                    </div>
+                    <div class="info-content">
+                        <p class="info-label">تاريخ الحجز</p>
+                        <h4 class="info-value">@Model.CreatedAt.ToString("yyyy-MM-dd")</h4>
+                        <p class="info-subtext">@Model.CreatedAt.ToString("hh:mm tt")</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reason Section -->
+            @if (!string.IsNullOrEmpty(Model.Reason))
+            {
+                <div class="reason-section">
+                    <div class="reason-header">
+                        <i class="fas fa-notes-medical"></i>
+                        <h4>سبب الزيارة</h4>
+                    </div>
+                    <p class="reason-text">@Model.Reason</p>
+                </div>
+            }
+
+            <!-- Notes Section -->
+            @if (!string.IsNullOrEmpty(Model.Notes))
+            {
+                <div class="notes-section">
+                    <div class="notes-header">
+                        <i class="fas fa-sticky-note"></i>
+                        <h4>ملاحظات</h4>
+                    </div>
+                    <p class="notes-text">@Model.Notes</p>
+                </div>
+            }
+
+            <!-- Action Buttons -->
+            <div class="appointment-actions">
+                <a href="@Url.Action("Dashboard", "Patient")" class="btn btn-secondary">
+                    <i class="fas fa-home"></i>
+                    <span>الصفحة الرئيسية</span>
+                </a>
+
+                @if (Model.Status == "Scheduled" && Model.AppointmentDate > DateTime.Now)
+                {
+                    <a href="@Url.Action("RescheduleAppointment", "Patient", new { id = Model.AppointmentId })" class="btn btn-warning">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>إعادة جدولة</span>
+                    </a>
+
+                    <a href="@Url.Action("CancelAppointment", "Patient", new { id = Model.AppointmentId })" class="btn btn-danger">
+                        <i class="fas fa-times-circle"></i>
+                        <span>إلغاء الموعد</span>
+                    </a>
+                }
+            </div>
+        </div>
+
+        <!-- Medical Record Section -->
+        @if (medicalRecord != null)
+        {
+            <div style="background: linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 100%); border-radius: 20px; padding: 2rem; border: 2px solid #6EE7B7; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);">
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <div style="display: flex; align-items: center; gap: 1.5rem;">
+                        <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #10B981 0%, #059669 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.8rem; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);">
+                            <i class="fas fa-file-medical"></i>
+                        </div>
+                        <div>
+                            <h3 style="font-size: 1.5rem; font-weight: 800; color: #065F46; margin: 0 0 0.5rem 0;">
+                                السجل الطبي متوفر
+                            </h3>
+                            <p style="color: #047857; margin: 0;">
+                                يوجد سجل طبي مرتبط بهذا الموعد
+                            </p>
+                        </div>
+                    </div>
+                    <a href="@Url.Action("RecordDetails", "MedicalRecords", new { id = medicalRecord.RecordId })" class="btn btn-success">
+                        <i class="fas fa-eye"></i>
+                        <span>عرض السجل</span>
+                    </a>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    .btn {
+        padding: 1rem 2rem;
+        border-radius: 12px;
+        border: none;
+        font-weight: 700;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+        text-decoration: none;
+    }
+
+    .btn-secondary {
+        background: linear-gradient(135deg, #F1F5F9 0%, #E2E8F0 100%);
+        color: #475569;
+    }
+
+    .btn-warning {
+        background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+        color: white;
+    }
+
+    .btn-danger {
+        background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+        color: white;
+    }
+
+    .btn-success {
+        background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+        color: white;
+    }
+
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .status-badge-large {
+        padding: 0.75rem 1.5rem;
+        border-radius: 12px;
+        font-weight: 800;
+        font-size: 1.1rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .status-scheduled {
+        background: linear-gradient(135deg, #DBEAFE 0%, #BFDBFE 100%);
+        color: #1E40AF;
+    }
+
+    .status-completed {
+        background: linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 100%);
+        color: #065F46;
+    }
+
+    .status-cancelled {
+        background: linear-gradient(135deg, #FEE2E2 0%, #FECACA 100%);
+        color: #991B1B;
+    }
+
+    .appointment-id {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #64748B;
+    }
+
+    .participant-card {
+        background: linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%);
+        border-radius: 16px;
+        padding: 2rem;
+        border: 2px solid #E2E8F0;
+        display: flex;
+        gap: 1.5rem;
+        align-items: center;
+    }
+
+    .participant-avatar {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 2rem;
+        font-weight: 800;
+        flex-shrink: 0;
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    }
+
+    .participant-info {
+        flex: 1;
+    }
+
+    .participant-label {
+        color: #64748B;
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin: 0 0 0.5rem 0;
+    }
+
+    .participant-name {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: #0F172A;
+        margin: 0 0 0.5rem 0;
+    }
+
+    .participant-specialty {
+        color: #3B82F6;
+        font-weight: 700;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .appointment-info-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .info-card {
+        background: linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%);
+        border-radius: 12px;
+        padding: 1.5rem;
+        border: 2px solid #E2E8F0;
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+    }
+
+    .info-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.5rem;
+        flex-shrink: 0;
+    }
+
+    .info-content {
+        flex: 1;
+    }
+
+    .info-label {
+        color: #64748B;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin: 0 0 0.5rem 0;
+    }
+
+    .info-value {
+        font-size: 1.3rem;
+        font-weight: 800;
+        color: #0F172A;
+        margin: 0 0 0.25rem 0;
+    }
+
+    .info-subtext {
+        color: #94A3B8;
+        font-size: 0.85rem;
+        margin: 0;
+    }
+
+    .reason-section, .notes-section {
+        background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        border-right: 4px solid #F59E0B;
+    }
+
+    .notes-section {
+        background: linear-gradient(135deg, #FEE2E2 0%, #FECACA 100%);
+        border-right-color: #EF4444;
+    }
+
+    .reason-header, .notes-header {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+    }
+
+        .reason-header h4, .notes-header h4 {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #92400E;
+            margin: 0;
+        }
+
+        .notes-header h4 {
+            color: #991B1B;
+        }
+
+        .reason-header i, .notes-header i {
+            color: #F59E0B;
+            font-size: 1.3rem;
+        }
+
+        .notes-header i {
+            color: #EF4444;
+        }
+
+    .reason-text, .notes-text {
+        color: #78350F;
+        font-size: 1rem;
+        line-height: 1.6;
+        margin: 0;
+    }
+
+    .notes-text {
+        color: #7F1D1D;
+    }
+
+    .appointment-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        padding-top: 1.5rem;
+        border-top: 2px solid #EFF6FF;
+    }
+
+    @@media (max-width: 768px) {
+        .appointment-info-grid
+
+    {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .appointment-actions {
+        flex-direction: column;
+    }
+
+    }
+</style>

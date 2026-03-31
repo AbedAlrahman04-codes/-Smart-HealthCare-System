@@ -1,0 +1,228 @@
+﻿@model SmartHealthcareSystem.Models.Patient
+
+@{
+    ViewData["Title"] = "الملف الشخصي";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/patient.css" />
+}
+
+<div class="patient-page">
+    <div class="patient-container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="page-header-content">
+                <div class="page-title-section">
+                    <div class="page-icon">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <div class="page-title-text">
+                        <h1>الملف الشخصي</h1>
+                        <p>معلوماتك الشخصية والطبية</p>
+                    </div>
+                </div>
+                <div class="page-actions">
+                    <a href="@Url.Action("Dashboard", "Patient")" class="btn btn-secondary">
+                        <i class="fas fa-arrow-right"></i>
+                        <span>العودة</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem;">
+            <!-- Profile Summary -->
+            <div>
+                <div class="profile-card">
+                    <div style="text-align: center;">
+                        <div class="profile-avatar" style="margin: 0 auto 1.5rem;">
+                            @if (!string.IsNullOrEmpty(Model?.User?.FullName))
+                            {
+                                var nameParts = Model.User.FullName.Split(' ');
+                                var initials = nameParts.Length >= 2
+                                ? nameParts[0].Substring(0, 1) + nameParts[1].Substring(0, 1)
+                                : nameParts[0].Substring(0, 1);
+                                <span>@initials</span>
+                            }
+                        </div>
+                        <h2 style="font-size: 1.8rem; font-weight: 800; color: #0F172A; margin: 0 0 0.5rem 0;">
+                            @Model?.User?.FullName
+                        </h2>
+                        <p class="profile-role">
+                            <i class="fas fa-user"></i>
+                            مريض
+                        </p>
+                    </div>
+
+                    <div style="margin-top: 2rem; padding-top: 2rem; border-top: 2px solid #E0F2FE;">
+                        <div class="profile-field" style="margin-bottom: 1rem;">
+                            <div class="profile-field-label">
+                                <i class="fas fa-envelope"></i>
+                                <span>البريد الإلكتروني</span>
+                            </div>
+                            <div class="profile-field-value">@Model?.User?.Email</div>
+                        </div>
+
+                        <div class="profile-field" style="margin-bottom: 1rem;">
+                            <div class="profile-field-label">
+                                <i class="fas fa-phone"></i>
+                                <span>رقم الهاتف</span>
+                            </div>
+                            <div class="profile-field-value">@(Model?.User?.Phone ?? "غير محدد")</div>
+                        </div>
+
+                        <div class="profile-field">
+                            <div class="profile-field-label">
+                                <i class="fas fa-calendar"></i>
+                                <span>تاريخ التسجيل</span>
+                            </div>
+                            <div class="profile-field-value">@Model?.User?.CreatedAt.ToString("yyyy-MM-dd")</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Edit Profile Form -->
+            <div class="profile-card">
+                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 2px solid #E0F2FE;">
+                    <div style="width: 60px; height: 60px; background: var(--patient-gradient); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.8rem;">
+                        <i class="fas fa-edit"></i>
+                    </div>
+                    <div>
+                        <h3 style="font-size: 1.6rem; font-weight: 800; color: #0F172A; margin: 0;">تحديث المعلومات</h3>
+                        <p style="color: #64748B; margin: 0;">قم بتحديث معلوماتك الشخصية والطبية</p>
+                    </div>
+                </div>
+
+                <form asp-action="Profile" asp-controller="Patient" method="post">
+                    @Html.AntiForgeryToken()
+
+                    <!-- Personal Information Section -->
+                    <div style="background: linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 100%); padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem; border-right: 4px solid var(--patient-primary);">
+                        <h4 style="display: flex; align-items: center; gap: 0.75rem; font-size: 1.2rem; font-weight: 800; color: var(--patient-dark); margin: 0 0 1.5rem 0;">
+                            <i class="fas fa-user"></i>
+                            <span>المعلومات الشخصية</span>
+                        </h4>
+
+                        <div class="profile-grid">
+                            <div class="form-group">
+                                <label class="form-label" asp-for="User.FullName">
+                                    <i class="fas fa-id-card"></i>
+                                    الاسم الكامل
+                                </label>
+                                <input type="text" class="form-control" asp-for="User.FullName" required />
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" asp-for="User.Phone">
+                                    <i class="fas fa-phone"></i>
+                                    رقم الهاتف
+                                </label>
+                                <input type="tel" class="form-control" asp-for="User.Phone" />
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" asp-for="DateOfBirth">
+                                    <i class="fas fa-calendar-alt"></i>
+                                    تاريخ الميلاد
+                                </label>
+                                <input type="date" class="form-control" asp-for="DateOfBirth" required />
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" asp-for="Gender">
+                                    <i class="fas fa-venus-mars"></i>
+                                    الجنس
+                                </label>
+                                <select class="form-select" asp-for="Gender" required>
+                                    <option value="">-- اختر --</option>
+                                    <option value="Male">ذكر</option>
+                                    <option value="Female">أنثى</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Medical Information Section -->
+                    <div style="background: linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 100%); padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem; border-right: 4px solid #10B981;">
+                        <h4 style="display: flex; align-items: center; gap: 0.75rem; font-size: 1.2rem; font-weight: 800; color: #065F46; margin: 0 0 1.5rem 0;">
+                            <i class="fas fa-heartbeat"></i>
+                            <span>المعلومات الطبية</span>
+                        </h4>
+
+                        <div class="profile-grid">
+                            <div class="form-group">
+                                <label class="form-label" asp-for="BloodType">
+                                    <i class="fas fa-tint"></i>
+                                    فصيلة الدم
+                                </label>
+                                <select class="form-select" asp-for="BloodType">
+                                    <option value="">-- اختر --</option>
+                                    <option value="A+">A+</option>
+                                    <option value="A-">A-</option>
+                                    <option value="B+">B+</option>
+                                    <option value="B-">B-</option>
+                                    <option value="AB+">AB+</option>
+                                    <option value="AB-">AB-</option>
+                                    <option value="O+">O+</option>
+                                    <option value="O-">O-</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" asp-for="Address">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    العنوان
+                                </label>
+                                <input type="text" class="form-control" asp-for="Address" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Emergency Contact Section -->
+                    <div style="background: linear-gradient(135deg, #FEE2E2 0%, #FECACA 100%); padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem; border-right: 4px solid #EF4444;">
+                        <h4 style="display: flex; align-items: center; gap: 0.75rem; font-size: 1.2rem; font-weight: 800; color: #991B1B; margin: 0 0 1.5rem 0;">
+                            <i class="fas fa-ambulance"></i>
+                            <span>جهة الاتصال الطارئة</span>
+                        </h4>
+
+                        <div class="profile-grid">
+                            <div class="form-group">
+                                <label class="form-label" asp-for="EmergencyContact">
+                                    <i class="fas fa-user"></i>
+                                    اسم جهة الاتصال
+                                </label>
+                                <input type="text" class="form-control" asp-for="EmergencyContact" />
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" asp-for="EmergencyPhone">
+                                    <i class="fas fa-phone-alt"></i>
+                                    رقم هاتف الطوارئ
+                                </label>
+                                <input type="tel" class="form-control" asp-for="EmergencyPhone" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div style="display: flex; gap: 1rem;">
+                        <button type="submit" class="btn btn-primary" style="flex: 1;">
+                            <i class="fas fa-save"></i>
+                            <span>حفظ التغييرات</span>
+                        </button>
+                        <a href="@Url.Action("Dashboard", "Patient")" class="btn btn-secondary" style="flex: 1;">
+                            <i class="fas fa-times"></i>
+                            <span>إلغاء</span>
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

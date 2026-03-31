@@ -1,0 +1,172 @@
+﻿@{
+    ViewData["Title"] = "حجز موعد جديد";
+    var doctors = ViewBag.Doctors as List<SmartHealthcareSystem.Models.Doctor>;
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/patient.css" />
+}
+
+<div class="patient-page">
+    <div class="patient-container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="page-header-content">
+                <div class="page-title-section">
+                    <div class="page-icon">
+                        <i class="fas fa-calendar-plus"></i>
+                    </div>
+                    <div class="page-title-text">
+                        <h1>حجز موعد جديد</h1>
+                        <p>احجز موعداً مع أحد أطبائنا المتميزين</p>
+                    </div>
+                </div>
+                <div class="page-actions">
+                    <a href="@Url.Action("Dashboard", "Patient")" class="btn btn-secondary">
+                        <i class="fas fa-arrow-right"></i>
+                        <span>العودة</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;">
+            <!-- Booking Form -->
+            <div class="book-form-card">
+                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 2px solid #E0F2FE;">
+                    <div style="width: 60px; height: 60px; background: var(--patient-gradient); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.8rem;">
+                        <i class="fas fa-clipboard-list"></i>
+                    </div>
+                    <div>
+                        <h3 style="font-size: 1.6rem; font-weight: 800; color: #0F172A; margin: 0;">معلومات الموعد</h3>
+                        <p style="color: #64748B; margin: 0;">املأ النموذج أدناه لحجز موعدك</p>
+                    </div>
+                </div>
+
+                <form asp-action="BookAppointment" asp-controller="Patient" method="post">
+                    @Html.AntiForgeryToken()
+
+                    <!-- Doctor Selection -->
+                    <div class="form-group">
+                        <label class="form-label" for="doctorId">
+                            <i class="fas fa-user-md"></i>
+                            اختر الطبيب <span style="color: #EF4444;">*</span>
+                        </label>
+                        <select class="form-select" id="doctorId" name="doctorId" required>
+                            <option value="">-- اختر طبيباً --</option>
+                            @if (doctors != null)
+                            {
+                                @foreach (var doctor in doctors)
+                                {
+                                    <option value="@doctor.DoctorId">
+                                        د. @doctor.User?.FullName - @doctor.Specialization
+                                    </option>
+                                }
+                            }
+                        </select>
+                    </div>
+
+                    <!-- Date & Time -->
+                    <div class="form-group">
+                        <label class="form-label" for="appointmentDate">
+                            <i class="fas fa-calendar-alt"></i>
+                            التاريخ والوقت <span style="color: #EF4444;">*</span>
+                        </label>
+                        <input type="datetime-local"
+                               class="form-control"
+                               id="appointmentDate"
+                               name="appointmentDate"
+                               min="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")"
+                               required />
+                        <small style="color: #64748B; display: block; margin-top: 0.5rem;">
+                            <i class="fas fa-info-circle"></i>
+                            اختر تاريخاً ووقتاً مستقبلياً
+                        </small>
+                    </div>
+
+                    <!-- Reason -->
+                    <div class="form-group">
+                        <label class="form-label" for="reason">
+                            <i class="fas fa-notes-medical"></i>
+                            سبب الزيارة (اختياري)
+                        </label>
+                        <textarea class="form-control"
+                                  id="reason"
+                                  name="reason"
+                                  rows="4"
+                                  placeholder="اكتب سبب الزيارة أو الأعراض التي تعاني منها..."></textarea>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                        <button type="submit" class="btn btn-primary" style="flex: 1;">
+                            <i class="fas fa-check-circle"></i>
+                            <span>تأكيد الحجز</span>
+                        </button>
+                        <a href="@Url.Action("Dashboard", "Patient")" class="btn btn-secondary" style="flex: 1;">
+                            <i class="fas fa-times"></i>
+                            <span>إلغاء</span>
+                        </a>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Info Card -->
+            <div>
+                <!-- Tips Card -->
+                <div style="background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; border: 2px solid #FCD34D;">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+                        <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem;">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                        <h4 style="font-size: 1.3rem; font-weight: 800; color: #92400E; margin: 0;">نصائح مهمة</h4>
+                    </div>
+                    <ul style="list-style: none; padding: 0; margin: 0; color: #78350F;">
+                        <li style="padding: 0.75rem 0; display: flex; align-items: start; gap: 0.75rem; border-bottom: 1px solid rgba(251, 191, 36, 0.3);">
+                            <i class="fas fa-check-circle" style="color: #10B981; font-size: 1.2rem; flex-shrink: 0; margin-top: 0.2rem;"></i>
+                            <span>اختر الطبيب المناسب لحالتك</span>
+                        </li>
+                        <li style="padding: 0.75rem 0; display: flex; align-items: start; gap: 0.75rem; border-bottom: 1px solid rgba(251, 191, 36, 0.3);">
+                            <i class="fas fa-check-circle" style="color: #10B981; font-size: 1.2rem; flex-shrink: 0; margin-top: 0.2rem;"></i>
+                            <span>حدد وقتاً مناسباً لك</span>
+                        </li>
+                        <li style="padding: 0.75rem 0; display: flex; align-items: start; gap: 0.75rem; border-bottom: 1px solid rgba(251, 191, 36, 0.3);">
+                            <i class="fas fa-check-circle" style="color: #10B981; font-size: 1.2rem; flex-shrink: 0; margin-top: 0.2rem;"></i>
+                            <span>اكتب وصفاً دقيقاً للأعراض</span>
+                        </li>
+                        <li style="padding: 0.75rem 0; display: flex; align-items: start; gap: 0.75rem;">
+                            <i class="fas fa-check-circle" style="color: #10B981; font-size: 1.2rem; flex-shrink: 0; margin-top: 0.2rem;"></i>
+                            <span>احضر قبل الموعد بـ 10 دقائق</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Available Doctors Count -->
+                <div style="background: linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 100%); border-radius: 16px; padding: 2rem; border: 2px solid #6EE7B7; text-align: center;">
+                    <div style="width: 70px; height: 70px; background: linear-gradient(135deg, #10B981 0%, #059669 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; margin: 0 auto 1rem; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);">
+                        <i class="fas fa-user-md"></i>
+                    </div>
+                    <h3 style="font-size: 2.5rem; font-weight: 800; color: #065F46; margin: 0 0 0.5rem 0;">
+                        @(doctors?.Count ?? 0)
+                    </h3>
+                    <p style="color: #047857; font-weight: 600; margin: 0;">طبيب متاح</p>
+                </div>
+
+                <!-- Support Card -->
+                <div style="background: linear-gradient(135deg, #DBEAFE 0%, #BFDBFE 100%); border-radius: 16px; padding: 2rem; margin-top: 1.5rem; border: 2px solid #93C5FD; text-align: center;">
+                    <i class="fas fa-headset" style="font-size: 2.5rem; color: var(--patient-primary); margin-bottom: 1rem;"></i>
+                    <h4 style="font-size: 1.2rem; font-weight: 800; color: #1E40AF; margin: 0 0 0.5rem 0;">تحتاج مساعدة؟</h4>
+                    <p style="color: #1E40AF; margin: 0 0 1rem 0; font-size: 0.95rem;">فريق الدعم متاح لمساعدتك</p>
+                    <a href="@Url.Action("Index", "AIAssistant")" class="btn btn-primary" style="width: 100%;">
+                        <i class="fas fa-comments"></i>
+                        <span>تحدث معنا</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,248 @@
+﻿@model IEnumerable<SmartHealthcareSystem.Models.MedicalRecord>
+
+@{
+    ViewData["Title"] = "My Medical Records";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/patient.css" asp-append-version="true" />
+}
+
+<div class="patient-page">
+    <div class="patient-container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="page-header-content">
+                <div class="page-title-section">
+                    <div class="page-icon">
+                        <i class="fas fa-file-medical"></i>
+                    </div>
+                    <div class="page-title-text">
+                        <h1>My Medical Records</h1>
+                        <p>View your complete medical history</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show">
+                <i class="fas fa-check-circle"></i> @TempData["SuccessMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show">
+                <i class="fas fa-exclamation-circle"></i> @TempData["ErrorMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
+
+        @if (Model.Any())
+        {
+            <div class="row">
+                @foreach (var record in Model)
+                {
+                    <div class="col-md-6 mb-4">
+                        <div class="stat-card medical-record-card">
+                            <div class="record-header">
+                                <div class="record-date">
+                                    <i class="fas fa-calendar-day"></i>
+                                    <strong>@record.VisitDate.ToString("MMMM dd, yyyy")</strong>
+                                </div>
+                                <span class="record-badge">
+                                    <i class="fas fa-file-medical-alt"></i>
+                                    Record #@record.RecordId
+                                </span>
+                            </div>
+
+                            <div class="record-body">
+                                <div class="record-info-item">
+                                    <i class="fas fa-user-md"></i>
+                                    <div>
+                                        <strong>Doctor</strong>
+                                        <p>د. @record.Doctor?.User?.FullName</p>
+                                    </div>
+                                </div>
+
+                                <div class="record-info-item">
+                                    <i class="fas fa-stethoscope"></i>
+                                    <div>
+                                        <strong>Diagnosis</strong>
+                                        <p>@record.Diagnosis</p>
+                                    </div>
+                                </div>
+
+                                @if (!string.IsNullOrEmpty(record.Symptoms))
+                                {
+                                    <div class="record-info-item">
+                                        <i class="fas fa-notes-medical"></i>
+                                        <div>
+                                            <strong>Symptoms</strong>
+                                            <p>@record.Symptoms</p>
+                                        </div>
+                                    </div>
+                                }
+
+                                @if (!string.IsNullOrEmpty(record.Prescription))
+                                {
+                                    <div class="record-info-item">
+                                        <i class="fas fa-prescription"></i>
+                                        <div>
+                                            <strong>Prescription</strong>
+                                            <p>@record.Prescription</p>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+
+                            <div class="record-footer">
+                                <a asp-action="Details" asp-route-id="@record.RecordId"
+                                   class="btn btn-primary">
+                                    <i class="fas fa-eye"></i>
+                                    View Details
+                                </a>
+                                <small class="text-muted">
+                                    <i class="fas fa-clock"></i>
+                                    Created: @record.CreatedAt.ToString("MMM dd, yyyy")
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="empty-state">
+                <div class="empty-state-icon">
+                    <i class="fas fa-folder-open"></i>
+                </div>
+                <h3>No Medical Records Found</h3>
+                <p>You don't have any medical records yet. Your doctor will create records after your appointments.</p>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    .medical-record-card {
+        border-radius: 12px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(26, 127, 160, 0.1);
+    }
+
+        .medical-record-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(26, 127, 160, 0.15);
+        }
+
+    .record-header {
+        background: linear-gradient(135deg, #1A7FA0, #4DB8E8);
+        padding: 1.2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: white;
+    }
+
+    .record-date {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1.1rem;
+    }
+
+    .record-badge {
+        background: rgba(255, 255, 255, 0.2);
+        padding: 0.4rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+    }
+
+    .record-body {
+        padding: 1.5rem;
+    }
+
+    .record-info-item {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1.2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+        .record-info-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .record-info-item i {
+            color: #1A7FA0;
+            font-size: 1.3rem;
+            width: 30px;
+            flex-shrink: 0;
+        }
+
+        .record-info-item div {
+            flex: 1;
+        }
+
+        .record-info-item strong {
+            display: block;
+            color: #666;
+            font-size: 0.85rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .record-info-item p {
+            margin: 0;
+            color: #333;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+    .record-footer {
+        padding: 1rem 1.5rem;
+        background: #f8f9fa;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    .empty-state-icon {
+        font-size: 4rem;
+        color: #1A7FA0;
+        margin-bottom: 1.5rem;
+        opacity: 0.5;
+    }
+
+    .empty-state h3 {
+        color: #333;
+        margin-bottom: 1rem;
+    }
+
+    .empty-state p {
+        color: #666;
+        margin-bottom: 2rem;
+        max-width: 500px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+</style>
